@@ -1,0 +1,49 @@
+{
+    "name": "next-favicons-manifest",
+    "version": "0.0.0",
+    "description": "Let Next.js generate all your favicons, icons and manifest for you.",
+    "keywords": [
+        "nextjs",
+        "webapp",
+        "pwa",
+        "manifest",
+        "favicon",
+        "icon",
+        "png",
+        "svg"
+    ],
+    "homepage": "https://github.com/anolilab/favicons-manifest",
+    "bugs": {
+        "url": "https://github.com/anolilab/favicons-manifest/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/anolilab/favicons-manifest.git"
+    },
+    "license": "MIT",
+    "author": "Daniel Bannert <d.bannert@anolilab.com> (https://github.com/prisis)",
+    "main": "dist/index.js",
+    "files": [
+        "dist/"
+    ],
+    "scripts": {
+        "build": "microbundle build -i ./src/index.ts -o ./dist/index.js --no-pkg-main -f cjs --compress --strict --raw --target node",
+        "dev": "microbundle watch -i ./src/index.ts -o ./dist/index.js --no-pkg-main -f cjs --strict --raw --target node"
+    },
+    "dependencies": {
+        "favicons": "^6.2.0",
+        "@anolilab/favicons-manifest-webpack-plugin": "0.0.0"
+    },
+    "devDependencies": {
+        "@types/favicons": "6.2.0",
+        "@types/next": "^9.0.0",
+        "@babel/plugin-proposal-optional-chaining": "^7.12.7",
+        "del-cli": "^3.0.1"
+    },
+    "peerDependencies": {
+        "next": "^9.5.5 || ^10.0.0"
+    },
+    "engines": {
+        "node": ">=12.16.0"
+    }
+}

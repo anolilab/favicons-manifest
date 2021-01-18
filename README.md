@@ -1,2 +1,2 @@
-# next-favicons
-Let Next.js generate all your favicons and icons for you.
+# next-icons
+Let Next.js generate all your icons and icons for you.

@@ -1,0 +1,78 @@
+{
+    "name": "@anolilab/favicons-manifest-webpack-plugin",
+    "version": "0.0.0",
+    "description": "Let webpack generate all your favicons, icons and manifest for you.",
+    "keywords": [
+        "webpack",
+        "plugin",
+        "html-webpack-plugin",
+        "webapp",
+        "pwa",
+        "manifest",
+        "favicon",
+        "icon",
+        "png",
+        "svg"
+    ],
+    "homepage": "https://github.com/anolilab/favicons-manifest",
+    "bugs": {
+        "url": "https://github.com/anolilab/favicons-manifest/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/anolilab/favicons-manifest.git"
+    },
+    "license": "MIT",
+    "author": "Daniel Bannert <d.bannert@anolilab.com> (https://github.com/prisis)",
+    "main": "dist/index.js",
+    "files": [
+        "dist/"
+    ],
+    "scripts": {
+        "build": "yarn run clean && yarn run build:webpack4 && yarn run build:webpack5 && microbundle build -i ./src/index.ts -o ./dist/index.js --no-pkg-main -f cjs --strict --raw --target node",
+        "build:webpack4": "microbundle build -i ./src/webpack4/file-watcher-api.ts -o ./dist/webpack4/file-watcher-api.js --no-pkg-main -f cjs --strict --raw --target node",
+        "build:webpack5": "microbundle build -i ./src/webpack5/file-watcher-api.ts -o ./dist/webpack5/file-watcher-api.js --no-pkg-main -f cjs --strict --raw --target node",
+        "clean": "del ./dist",
+        "dev": "microbundle watch -i ./src/index.ts -o ./dist/index.js --no-pkg-main -f cjs --strict --raw --target node"
+    },
+    "dependencies": {
+        "cache-loader": "^4.1.0",
+        "camelcase": "^6.2.0",
+        "find-cache-dir": "^3.3.1",
+        "find-root": "^1.1.0",
+        "loader-utils": "^2.0.0",
+        "parse-author": "^2.0.0",
+        "parse5": "^6.0.1",
+        "tapable": "^2.2.0",
+        "@anolilab/favicons": "0.0.0"
+    },
+    "devDependencies": {
+        "@types/favicons": "6.2.0",
+        "@types/find-cache-dir": "^3.2.0",
+        "@types/find-root": "^1.1.2",
+        "@types/parse-author": "^2.0.0",
+        "@types/node": "12.19.14",
+        "@types/parse5": "^6.0.0",
+        "@types/html-webpack-plugin": "^3.2.4",
+        "parse-author": "^2.0.0",
+        "diffable-html": "4.0.0",
+        "eslint": "^7.17.0",
+        "fs-extra": "^9.0.1",
+        "html-webpack-plugin": "^4.5.1",
+        "image-size": "0.9.3",
+        "webpack": "^5.14.0",
+        "webpack-cli": "^4.3.1",
+        "webpack-dev-server": "^3.11.2",
+        "webpack-merge": "^5.7.3",
+        "del-cli": "^3.0.1"
+    },
+    "peerDependencies": {
+        "webpack": "^4.46.0 || ^5.14.0"
+    },
+    "optionalDependencies": {
+        "html-webpack-plugin": "^4.5.1"
+    },
+    "engines": {
+        "node": ">=12.16.0"
+    }
+}
