@@ -1,9 +1,19 @@
-export const directory = (path: string) => {
-    return path.substr(-1) === "/" ? path : `${path}/`
-}
+import path from "path"
+import { fullFormats } from "ajv-formats/dist/formats"
+import { URL } from "url"
 
-export const relative = (path: string, basePath?: string, relativeToPath = false) => {
-    const url = new URL(path, (!relativeToPath && basePath && directory(basePath)) || "")
+export const relative = (srcPath: string, base: string, relativeToPath = false) => {
+    const directory = (p: string) => {
+        return p.substr(-1) === "/" ? p : `${p}/`
+    }
 
-    return url.href
+    if (relativeToPath) {
+        return srcPath
+    }
+
+    if ((fullFormats.uri as Function)(base)) {
+        return new URL(srcPath, base).toString()
+    }
+
+    return path.join(directory(base), srcPath)
 }

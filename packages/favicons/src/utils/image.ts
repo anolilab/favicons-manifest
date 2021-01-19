@@ -1,12 +1,4 @@
 import FastXmlParser from "fast-xml-parser"
-import color from "tinycolor2"
-import Jimp from "jimp"
-
-export const parseColor = (hex: string): number => {
-    const { r, g, b, a } = color(hex).toRgb()
-
-    return Jimp.rgbaToInt(r, g, b, a * 255)
-}
 
 // sharp renders the SVG in its source width and height with 72 DPI which can
 // cause a blurry result in case the source SVG is defined in lower size than
@@ -35,7 +27,9 @@ export const ensureSize = (
     if (svgWidth >= width && svgHeight >= height) {
         // If the base SVG is large enough, it does not need to be modified.
         return Promise.resolve(svgSource.file)
-    } else if (width > height) {
+    }
+
+    if (width > height) {
         svgHeight = Math.round(svgHeight * (width / svgWidth))
         svgWidth = width
     } else {
@@ -50,20 +44,18 @@ export const ensureSize = (
     return resize(svgSource.file, svgWidth, svgHeight)
 }
 
-export const resize = (svgFile: string, width: number, height: number): Promise<Buffer> => {
-    return new Promise((resolve, reject) => {
+export const resize = (svgFile: string, width: number, height: number): Promise<Buffer> =>
+    new Promise((resolve, reject) => {
+        const jsonObject = FastXmlParser.parse(svgFile, {}, true)
+
+        jsonObject.svg.$.width = width
+        jsonObject.svg.$.height = height
+
+        const j2xParser = FastXmlParser.j2xParser
+
         try {
-            const jsonObject = FastXmlParser.parse(svgFile, {}, true)
-
-            jsonObject.svg.$.width = width
-            jsonObject.svg.$.height = height
-
-            const j2xParser = FastXmlParser.j2xParser
-            const modifiedSvg = new j2xParser({}).parse(jsonObject)
-
-            resolve(Buffer.from(modifiedSvg))
+            resolve(Buffer.from(new j2xParser({}).parse(jsonObject)))
         } catch (error) {
-            return reject(error)
+            reject(error)
         }
     })
-}

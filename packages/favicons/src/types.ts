@@ -16,51 +16,80 @@ export interface FaviconResponse {
     html: string[]
 }
 
-export interface IconSettings {
-    width: number
-    height: number
+export interface IconSetting {
+    /** Icon file extension */
+    type: "png" | "ico"
+
     transparent: boolean
-    rotate: boolean
-    /** @see https://web.dev/maskable-icon/ */
-    purpose?: "any" | "maskable"
-    /** This is only needed for apple icons */
-    dwidth?: number
-    dheight?: number
-    pixelRatio?: number
-    orientation?: "portrait" | "landscape"
-}
 
-export interface IconOptions {
+    /** Rotate the image. true will rotate the icon 90 */
+    rotate: boolean | number
+
     /** Offset in percentage */
-    offset?: number
+    offset: number
 
-    /** Set background_color color for the specified icons, hex code for a specific color, undefined for default browser color behavior and "inherit" for force use of default browser color */
-    background?: string
+    /**
+     * Apply mask in order to create circle icon
+     *
+     * @see https://web.dev/maskable-icon/
+     */
+    mask: boolean
 
-    /** Apply mask in order to create circle icon (applied by default for firefox) */
-    mask?: boolean
+    /**
+     * Set background color for the specified icons, hex code for a specific color,
+     * false for default browser color behavior and true for force use of default browser color
+     */
+    background: string | boolean
 
-    /** Apply glow effect after mask has been applied (applied by default for firefox) */
-    overlayGlow?: boolean
+    /** Apply glow effect after mask has been applied */
+    overlayGlow: boolean
 
     /** Apply drop shadow after mask has been applied */
-    overlayShadow?: boolean
+    overlayShadow: boolean
 
-    /** Generates icons defined in this list, use to the name of a icon found in preset/recommended or generate new sizes with the object. */
-    icons?: string[] | IconSettings[]
+    sizes: {
+        width: number
+        height: number
+    }[]
+
+    /** @internal */
+    fingerprint?: string
 }
+
+export interface AppleIconSetting extends IconSetting {
+    sizes: {
+        width: number
+        height: number
+        dwidth: number
+        dheight: number
+        pixelRatio: number
+        orientation: "portrait" | "landscape"
+    }[]
+}
+
+/**
+ * Generates icons defined in this list, use to the name of a icon found in preset/recommended or
+ * generate new sizes with the object.
+ */
 
 export interface Icons {
     /* Create Android homescreen icon. */
-    android: boolean | IconOptions
+    android: boolean | IconSetting[]
+
     /* Create Apple touch icons. */
-    appleIcon: boolean | IconOptions
+    appleIcon: boolean | IconSetting[]
+
     /* Create Apple startup assets. */
-    appleStartup: boolean | IconOptions
+    appleStartup: boolean | AppleIconSetting[]
+
     /* Create regular icons. */
-    favicons: boolean | IconOptions
+    favicons: boolean | IconSetting[]
+
     /* Create Windows 8 tile icons. */
-    windows: boolean | IconOptions
+    windows: boolean | IconSetting[]
+
+    /** For extra icons */
+    [key: string]: boolean | IconSetting[] | AppleIconSetting[]
 }
 
 /** More info can be found on https://web.dev/add-manifest/ */
@@ -104,7 +133,7 @@ export interface Manifest {
      *
      *  @see https://developer.chrome.com/apps/manifest/name#short_name
      */
-    short_name: string
+    short_name?: string
 
     /**
      * The description member is a string in which developers can explain what the application does.
@@ -114,11 +143,6 @@ export interface Manifest {
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/description
      */
     description: string
-
-    /**
-     * Add a cross-origin attribute to the manifest <link rel="manifest" crossorigin="use-credentials" href="/manifest.webmanifest" /> link tag.
-     */
-    crossOrigin: "use-credentials" | "anonymous"
 
     /**
      * The start_url member is a string that represents the start URL of the web application — the preferred URL that should be loaded
@@ -139,13 +163,18 @@ export interface Manifest {
     lang: string
 
     /**
+     * Add a cross-origin attribute to the manifest <link rel="manifest" crossorigin="use-credentials" href="/manifest.webmanifest" /> link tag.
+     */
+    crossOrigin?: "use-credentials" | "anonymous"
+
+    /**
      * The display member is a string that determines the developers’ preferred display mode for the website.
      * The display mode changes how much of browser UI is shown to the user and can range from browser (when the full browser window is shown)
      * to fullscreen (when the app is full-screened).
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/display
      */
-    display: "fullscreen" | "standalone" | "minimal-ui" | "browser"
+    display?: "fullscreen" | "standalone" | "minimal-ui" | "browser"
 
     /**
      * The base direction in which to display direction-capable members of the manifest.
@@ -158,7 +187,7 @@ export interface Manifest {
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/dir
      */
-    dir: "auto" | "left" | "right"
+    dir?: "auto" | "left" | "right"
 
     /**
      * Therefore background_color should match the background_color-color CSS property in the site’s stylesheet
@@ -166,7 +195,7 @@ export interface Manifest {
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/background_color
      */
-    background_color: string
+    background_color?: string
 
     /**
      * The theme_color member is a string that defines the default theme color for the application.
@@ -174,7 +203,7 @@ export interface Manifest {
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/theme_color
      */
-    theme_color: string
+    theme_color?: string
 
     /**
      * The orientation member defines the default orientation for all the website's top-level
@@ -184,7 +213,7 @@ export interface Manifest {
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/orientation
      */
-    orientation:
+    orientation?:
         | "any"
         | "natural"
         | "landscape"
@@ -201,7 +230,7 @@ export interface Manifest {
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/prefer_related_applications
      */
-    prefer_related_applications: boolean
+    prefer_related_applications?: boolean
 
     /**
      * The related_applications field is an array of objects specifying native applications that are installable by, or accessible to,
@@ -211,7 +240,7 @@ export interface Manifest {
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/related_applications
      */
-    related_applications: {
+    related_applications?: {
         platform: string
         url: string
         id?: string
@@ -224,7 +253,7 @@ export interface Manifest {
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/scope
      */
-    scope: string
+    scope?: string
 
     /**
      * The categories member is an array of strings defining the names of categories that the application supposedly belongs to.
@@ -235,7 +264,7 @@ export interface Manifest {
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/categories
      * @see https://github.com/w3c/manifest/wiki/Categories
      */
-    categories: string[]
+    categories?: string[]
 
     /**
      * The iarc_rating_id member is a string that represents the International Age Rating Coalition (IARC) certification code of the web application.
@@ -244,7 +273,7 @@ export interface Manifest {
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/iarc_rating_id
      * @see https://www.globalratings.com/
      */
-    iarc_rating_id: string
+    iarc_rating_id?: string
 
     /**
      * The screenshots member defines an array of screenshots intended to showcase the application.
@@ -252,7 +281,7 @@ export interface Manifest {
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/screenshots
      */
-    screenshots: {
+    screenshots?: {
         src: string
         sizes: string
         type: string
@@ -266,7 +295,7 @@ export interface Manifest {
      *
      * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/shortcuts
      */
-    shortcuts: {
+    shortcuts?: {
         name: string
         short_name?: string
         description?: string
@@ -281,24 +310,29 @@ export interface Manifest {
     /**
      * Style for Apple status bar @default 'black-translucent'
      */
-    apple_status_bar_style: "black-translucent" | "default" | "black"
+    apple_status_bar_style?: "black-translucent" | "default" | "black"
 }
 
 export interface LocalizeManifest extends Manifest {
-    localize: Manifest[]
+    localize?: Manifest[]
 }
 
 export interface Options {
-    /** our source logo - can be png or svg (required) */
-    logo: string
+    /**
+     * Path for overriding default icons path.
+     */
+    path: string
 
     /**
      * Use nearest neighbor resampling to preserve hard edges on pixel art @default false
-     * */
+     */
     pixelArt?: boolean
 
-    /** Option to overwrite the  */
-    favicon?: string
+    /** Option to display or to overwrite the favicon.ico */
+    favicon?: boolean | string
+
+    /** Adds fingerprint to all generated files @default true */
+    fingerprints?: boolean
 
     /**
      * Favicons configuration option
@@ -308,23 +342,28 @@ export interface Options {
     /**
      * Manifest configuration option
      */
-    manifest?: Partial<LocalizeManifest>
+    manifest?: LocalizeManifest
 
     generators?: Partial<{
         html: boolean
         /** @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/dn320426(v=vs.85)?redirectedfrom=MSDN */
         manifest: boolean
+        browserconfig: boolean
     }>
 }
 
 export interface InternalOptions extends Options {
-    icons: Icons
-}
-
-export type PresetValue = {
-    [key: string]: { [key: string]: number | string | boolean | { width: number; height: number }[] }
-}
-
-export interface PresetConfig {
-    [key: string]: PresetValue
+    icons: {
+        android: IconSetting[]
+        appleIcon: IconSetting[]
+        appleStartup: AppleIconSetting[]
+        favicons: IconSetting[]
+        windows: IconSetting[]
+        [key: string]: IconSetting[] | AppleIconSetting[]
+    }
+    generators: {
+        html: boolean
+        manifest: boolean
+        browserconfig: boolean
+    }
 }

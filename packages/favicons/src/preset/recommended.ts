@@ -1,373 +1,380 @@
-import { PresetConfig } from "../types"
+import { Icons, Manifest } from "../types"
 
-const config: PresetConfig = {
-    android: {
-        "android-chrome-144x144.png": {
-            width: 144,
-            height: 144,
+export const icons: Icons = {
+    // android-chrome-144x144.png
+    android: [
+        {
+            sizes: [
+                {
+                    width: 144,
+                    height: 144,
+                },
+                {
+                    width: 256,
+                    height: 256,
+                },
+                {
+                    width: 384,
+                    height: 384,
+                },
+                {
+                    width: 512,
+                    height: 512,
+                },
+            ],
+            type: "png",
             transparent: true,
             rotate: false,
+            offset: 0,
             mask: false,
+            background: false,
+            overlayGlow: false,
+            overlayShadow: false,
         },
-        "android-chrome-256x256.png": {
-            width: 256,
-            height: 256,
+        // "android-chrome-maskable-36x36.png"
+        {
+            sizes: [
+                {
+                    width: 36,
+                    height: 36,
+                },
+                {
+                    width: 48,
+                    height: 48,
+                },
+                {
+                    width: 72,
+                    height: 72,
+                },
+                {
+                    width: 96,
+                    height: 96,
+                },
+                {
+                    width: 144,
+                    height: 144,
+                },
+                {
+                    width: 192,
+                    height: 192,
+                },
+                {
+                    width: 256,
+                    height: 256,
+                },
+                {
+                    width: 384,
+                    height: 384,
+                },
+                {
+                    width: 512,
+                    height: 512,
+                },
+            ],
+            type: "png",
             transparent: true,
             rotate: false,
-            mask: false,
+            offset: 0,
+            mask: true,
+            background: false,
+            overlayGlow: false,
+            overlayShadow: false,
         },
-        "android-chrome-384x384.png": {
-            width: 384,
-            height: 384,
+    ],
+    appleIcon: [
+        {
+            //"apple-touch-icon-57x57.png"
+            sizes: [
+                {
+                    width: 57,
+                    height: 57,
+                },
+                {
+                    width: 60,
+                    height: 60,
+                },
+                {
+                    width: 72,
+                    height: 72,
+                },
+                {
+                    width: 76,
+                    height: 76,
+                },
+                {
+                    width: 114,
+                    height: 114,
+                },
+                {
+                    width: 120,
+                    height: 120,
+                },
+                {
+                    width: 144,
+                    height: 144,
+                },
+                {
+                    width: 152,
+                    height: 152,
+                },
+                {
+                    width: 167,
+                    height: 167,
+                },
+                {
+                    width: 180,
+                    height: 180,
+                },
+                {
+                    width: 1024,
+                    height: 1024,
+                },
+            ],
+            type: "png",
             transparent: true,
             rotate: false,
+            offset: 0,
             mask: false,
+            background: false,
+            overlayGlow: false,
+            overlayShadow: false,
         },
-        "android-chrome-512x512.png": {
-            width: 512,
-            height: 512,
+    ],
+    // Device              Portrait size      Landscape size     Screen size        Pixel ratio
+    // iPhone SE            640px × 1136px    1136px ×  640px     320px ×  568px    2
+    // iPhone 8             750px × 1334px    1334px ×  750px     375px ×  667px    2
+    // iPhone 7             750px × 1334px    1334px ×  750px     375px ×  667px    2
+    // iPhone 6s            750px × 1334px    1334px ×  750px     375px ×  667px    2
+    // iPhone XR            828px × 1792px    1792px ×  828px     414px ×  896px    2
+    // iPhone XS           1125px × 2436px    2436px × 1125px     375px ×  812px    3
+    // iPhone X            1125px × 2436px    2436px × 1125px     375px ×  812px    3
+    // iPhone 8 Plus       1242px × 2208px    2208px × 1242px     414px ×  736px    3
+    // iPhone 7 Plus       1242px × 2208px    2208px × 1242px     414px ×  736px    3
+    // iPhone 6s Plus      1242px × 2208px    2208px × 1242px     414px ×  736px    3
+    // iPhone XS Max       1242px × 2688px    2688px × 1242px     414px ×  896px    3
+    // 9.7" iPad           1536px × 2048px    2048px × 1536px     768px × 1024px    2
+    // 10.2" iPad          1620px × 2160px    2160px x 1620px     810px × 1080px    2
+    // 7.9" iPad mini 4    1536px × 2048px    2048px × 1536px     768px × 1024px    2
+    // 10.5" iPad Pro      1668px × 2224px    2224px × 1668px     834px × 1112px    2
+    // 11" iPad Pro        1668px × 2388px    2388px × 1668px     834px × 1194px    2
+    // 12.9" iPad Pro      2048px × 2732px    2732px × 2048px    1024px × 1366px    2
+    appleStartup: [
+        {
+            // "apple-touch-startup-image-750x1334.png":
+            sizes: [
+                {
+                    width: 640,
+                    height: 1136,
+                    dwidth: 320,
+                    dheight: 568,
+                    pixelRatio: 2,
+                    orientation: "portrait",
+                },
+                {
+                    width: 750,
+                    height: 1334,
+                    dwidth: 375,
+                    dheight: 667,
+                    pixelRatio: 2,
+                    orientation: "portrait",
+                },
+                {
+                    width: 828,
+                    height: 1792,
+                    dwidth: 414,
+                    dheight: 896,
+                    pixelRatio: 2,
+                    orientation: "portrait",
+                },
+                {
+                    width: 1125,
+                    height: 2436,
+                    dwidth: 375,
+                    dheight: 812,
+                    pixelRatio: 3,
+                    orientation: "portrait",
+                },
+                {
+                    width: 1242,
+                    height: 2208,
+                    dwidth: 414,
+                    dheight: 736,
+                    pixelRatio: 3,
+                    orientation: "portrait",
+                },
+                {
+                    width: 1242,
+                    height: 2688,
+                    dwidth: 414,
+                    dheight: 896,
+                    pixelRatio: 3,
+                    orientation: "portrait",
+                },
+                {
+                    width: 1536,
+                    height: 2048,
+                    dwidth: 768,
+                    dheight: 1024,
+                    pixelRatio: 2,
+                    orientation: "portrait",
+                },
+                {
+                    width: 1668,
+                    height: 2224,
+                    dwidth: 834,
+                    dheight: 1112,
+                    pixelRatio: 2,
+                    orientation: "portrait",
+                },
+                {
+                    width: 1668,
+                    height: 2388,
+                    dwidth: 834,
+                    dheight: 1194,
+                    pixelRatio: 2,
+                    orientation: "portrait",
+                },
+                {
+                    width: 2048,
+                    height: 2732,
+                    dwidth: 1024,
+                    dheight: 1366,
+                    pixelRatio: 2,
+                    orientation: "portrait",
+                },
+                {
+                    height: 2160,
+                    width: 1620,
+                    dwidth: 810,
+                    dheight: 1080,
+                    pixelRatio: 2,
+                    orientation: "portrait",
+                },
+                {
+                    width: 1136,
+                    height: 640,
+                    dwidth: 320,
+                    dheight: 568,
+                    pixelRatio: 2,
+                    orientation: "landscape",
+                },
+                {
+                    width: 2160,
+                    height: 1620,
+                    dwidth: 810,
+                    dheight: 1080,
+                    pixelRatio: 2,
+                    orientation: "landscape",
+                },
+                {
+                    width: 1334,
+                    height: 750,
+                    dwidth: 375,
+                    dheight: 667,
+                    pixelRatio: 2,
+                    orientation: "landscape",
+                },
+                {
+                    width: 1792,
+                    height: 828,
+                    dwidth: 414,
+                    dheight: 896,
+                    pixelRatio: 2,
+                    orientation: "landscape",
+                },
+                {
+                    width: 2436,
+                    height: 1125,
+                    dwidth: 375,
+                    dheight: 812,
+                    pixelRatio: 3,
+                    orientation: "landscape",
+                },
+                {
+                    width: 2208,
+                    height: 1242,
+                    dwidth: 414,
+                    dheight: 736,
+                    pixelRatio: 3,
+                    orientation: "landscape",
+                },
+                {
+                    width: 2688,
+                    height: 1242,
+                    dwidth: 414,
+                    dheight: 896,
+                    pixelRatio: 3,
+                    orientation: "landscape",
+                },
+                {
+                    width: 2048,
+                    height: 1536,
+                    dwidth: 768,
+                    dheight: 1024,
+                    pixelRatio: 2,
+                    orientation: "landscape",
+                },
+                {
+                    width: 2224,
+                    height: 1668,
+                    dwidth: 834,
+                    dheight: 1112,
+                    pixelRatio: 2,
+                    orientation: "landscape",
+                },
+                {
+                    width: 2388,
+                    height: 1668,
+                    dwidth: 834,
+                    dheight: 1194,
+                    pixelRatio: 2,
+                    orientation: "landscape",
+                },
+                {
+                    width: 2732,
+                    height: 2048,
+                    dwidth: 1024,
+                    dheight: 1366,
+                    pixelRatio: 2,
+                    orientation: "landscape",
+                },
+            ],
+            type: "png",
             transparent: true,
             rotate: false,
+            offset: 0,
             mask: false,
+            background: false,
+            overlayGlow: false,
+            overlayShadow: false,
         },
-    },
-    android_maskable: {
-        "android-chrome-maskable-36x36.png": {
-            width: 36,
-            height: 36,
+    ],
+    favicons: [
+        {
+            sizes: [
+                {
+                    width: 16,
+                    height: 16,
+                },
+                {
+                    width: 32,
+                    height: 32,
+                },
+                {
+                    width: 48,
+                    height: 48,
+                },
+            ],
+            type: "png",
             transparent: true,
             rotate: false,
+            offset: 0,
             mask: false,
+            background: false,
+            overlayGlow: false,
+            overlayShadow: false,
         },
-        "android-chrome-maskable-48x48.png": {
-            width: 48,
-            height: 48,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "android-chrome-maskable-72x72.png": {
-            width: 72,
-            height: 72,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "android-chrome-maskable-96x96.png": {
-            width: 96,
-            height: 96,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "android-chrome-maskable-144x144.png": {
-            width: 144,
-            height: 144,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "android-chrome-maskable-192x192.png": {
-            width: 192,
-            height: 192,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "android-chrome-maskable-256x256.png": {
-            width: 256,
-            height: 256,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "android-chrome-maskable-384x384.png": {
-            width: 384,
-            height: 384,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "android-chrome-maskable-512x512.png": {
-            width: 512,
-            height: 512,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-    },
-    appleIcon: {
-        "apple-touch-icon-57x57.png": {
-            width: 57,
-            height: 57,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-60x60.png": {
-            width: 60,
-            height: 60,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-72x72.png": {
-            width: 72,
-            height: 72,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-76x76.png": {
-            width: 76,
-            height: 76,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-114x114.png": {
-            width: 114,
-            height: 114,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-120x120.png": {
-            width: 120,
-            height: 120,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-144x144.png": {
-            width: 144,
-            height: 144,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-152x152.png": {
-            width: 152,
-            height: 152,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-167x167.png": {
-            width: 167,
-            height: 167,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-180x180.png": {
-            width: 180,
-            height: 180,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-1024x1024.png": {
-            width: 1024,
-            height: 1024,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon.png": {
-            width: 180,
-            height: 180,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-icon-precomposed.png": {
-            width: 180,
-            height: 180,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-    },
-    appleStartup: {
-        "apple-touch-startup-image-640x1136.png": {
-            width: 640,
-            height: 1136,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-750x1334.png": {
-            width: 750,
-            height: 1334,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-828x1792.png": {
-            width: 828,
-            height: 1792,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-1125x2436.png": {
-            width: 1125,
-            height: 2436,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-1242x2208.png": {
-            width: 1242,
-            height: 2208,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-1242x2688.png": {
-            width: 1242,
-            height: 2688,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-1536x2048.png": {
-            width: 1536,
-            height: 2048,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-1668x2224.png": {
-            width: 1668,
-            height: 2224,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-1668x2388.png": {
-            width: 1668,
-            height: 2388,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-2048x2732.png": {
-            width: 2048,
-            height: 2732,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-1136x640.png": {
-            width: 1136,
-            height: 640,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-2160x1620.png": {
-            width: 2160,
-            height: 1620,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-1620x2160.png": {
-            height: 2160,
-            width: 1620,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-1334x750.png": {
-            width: 1334,
-            height: 750,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-1792x828.png": {
-            width: 1792,
-            height: 828,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-2436x1125.png": {
-            width: 2436,
-            height: 1125,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-2208x1242.png": {
-            width: 2208,
-            height: 1242,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-2688x1242.png": {
-            width: 2688,
-            height: 1242,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-2048x1536.png": {
-            width: 2048,
-            height: 1536,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-2224x1668.png": {
-            width: 2224,
-            height: 1668,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-2388x1668.png": {
-            width: 2388,
-            height: 1668,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-        "apple-touch-startup-image-2732x2048.png": {
-            width: 2732,
-            height: 2048,
-            transparent: false,
-            rotate: false,
-            mask: false,
-        },
-    },
-    favicons: {
-        "favicon-16x16.png": {
-            width: 16,
-            height: 16,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "favicon-32x32.png": {
-            width: 32,
-            height: 32,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "favicon-48x48.png": {
-            width: 48,
-            height: 48,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "favicon.ico": {
+        {
             sizes: [
                 {
                     width: 16,
@@ -390,48 +397,59 @@ const config: PresetConfig = {
                     height: 64,
                 },
             ],
+            type: "ico",
             transparent: true,
             rotate: false,
+            offset: 0,
             mask: false,
+            background: false,
+            overlayGlow: false,
+            overlayShadow: false,
         },
-    },
-    windows: {
-        "mstile-70x70.png": {
-            width: 70,
-            height: 70,
+    ],
+    windows: [
+        {
+            // "mstile-70x70.png"
+            sizes: [
+                {
+                    width: 70,
+                    height: 70,
+                },
+                {
+                    width: 144,
+                    height: 144,
+                },
+                {
+                    width: 150,
+                    height: 150,
+                },
+                {
+                    width: 310,
+                    height: 150,
+                },
+                {
+                    width: 310,
+                    height: 310,
+                },
+            ],
+            type: "png",
             transparent: true,
             rotate: false,
+            offset: 0,
             mask: false,
+            background: false,
+            overlayGlow: false,
+            overlayShadow: false,
         },
-        "mstile-144x144.png": {
-            width: 144,
-            height: 144,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "mstile-150x150.png": {
-            width: 150,
-            height: 150,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "mstile-310x150.png": {
-            width: 310,
-            height: 150,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-        "mstile-310x310.png": {
-            width: 310,
-            height: 310,
-            transparent: true,
-            rotate: false,
-            mask: false,
-        },
-    },
+    ],
 }
 
-export default config
+export const manifest: Partial<Manifest> = {
+    dir: "auto",
+    crossOrigin: "use-credentials",
+    display: "standalone",
+    orientation: "any",
+    background_color: "#ffffff",
+    theme_color: "#ffffff",
+    apple_status_bar_style: "black-translucent",
+}

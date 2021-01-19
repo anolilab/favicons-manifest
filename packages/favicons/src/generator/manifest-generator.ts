@@ -1,8 +1,9 @@
 import { DefinedError } from "ajv"
-import ajv from "./../ajv"
 import { get as parseColor, ColorDescriptor } from "color-string"
 import bcp47 from "bcp-47"
 import { ucs2 } from "punycode/"
+import ajv from "./../ajv"
+import fingerprint from "./../utils/fingerprint"
 import WebManifestSchema from "../schema/web-manifest"
 import { InternalOptions } from "../types"
 
@@ -103,9 +104,11 @@ const generator = (
     }
 
     if (validate(manifest)) {
+        const content = JSON.stringify(manifest, null, 2)
+
         manifests.push({
-            name: "manifest.webmanifest",
-            content: JSON.stringify(manifest, null, 2),
+            name: `manifest${options.fingerprints ? `.${fingerprint(content)}` : ""}.webmanifest`,
+            content,
         })
     } else {
         for (const err of validate.errors as DefinedError[]) {
@@ -138,9 +141,13 @@ const generator = (
         }
 
         if (validate(extendedManifest)) {
+            const content = JSON.stringify(extendedManifest, null, 2)
+
             manifests.push({
-                name: `manifest_${extendedManifest.lang}.webmanifest`,
-                content: JSON.stringify(extendedManifest, null, 2),
+                name: `manifest_${extendedManifest.lang}${
+                    options.fingerprints ? `.${fingerprint(content)}` : ""
+                }.webmanifest`,
+                content,
             })
         } else {
             for (const err of validate.errors as DefinedError[]) {

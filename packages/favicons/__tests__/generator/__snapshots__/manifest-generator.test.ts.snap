@@ -1,0 +1,245 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`manifest-generator generate full Manifest file 1`] = `
+{
+  "name": "test",
+  "short_name": "__tests__-2",
+  "description": "description",
+  "start_url": "./",
+  "lang": "de-DE",
+  "display": "browser",
+  "dir": "auto",
+  "background_color": "#fff",
+  "theme_color": "#fff",
+  "orientation": "any",
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.example.app1",
+      "id": "com.example.app1"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://itunes.apple.com/app/example-app1/id123456789"
+    }
+  ],
+  "scope": "/app/",
+  "categories": [
+    "books",
+    "education",
+    "medical"
+  ],
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "screenshots": [
+    {
+      "src": "screenshot1.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    },
+    {
+      "src": "screenshot2.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's agenda",
+      "url": "/today",
+      "description": "List of events planned for today"
+    },
+    {
+      "name": "New event",
+      "url": "/create/event"
+    },
+    {
+      "name": "New reminder",
+      "url": "/create/reminder"
+    }
+  ]
+}
+`;
+
+exports[`manifest-generator generate full Manifest file with fingerprint 1`] = `
+{
+  "name": "test",
+  "short_name": "__tests__-2",
+  "description": "description",
+  "start_url": "./",
+  "lang": "de-DE",
+  "display": "browser",
+  "dir": "auto",
+  "background_color": "#fff",
+  "theme_color": "#fff",
+  "orientation": "any",
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.example.app1",
+      "id": "com.example.app1"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://itunes.apple.com/app/example-app1/id123456789"
+    }
+  ],
+  "scope": "/app/",
+  "categories": [
+    "books",
+    "education",
+    "medical"
+  ],
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "screenshots": [
+    {
+      "src": "screenshot1.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    },
+    {
+      "src": "screenshot2.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's agenda",
+      "url": "/today",
+      "description": "List of events planned for today"
+    },
+    {
+      "name": "New event",
+      "url": "/create/event"
+    },
+    {
+      "name": "New reminder",
+      "url": "/create/reminder"
+    }
+  ]
+}
+`;
+
+exports[`manifest-generator generate full Manifest file with fingerprint and localize 1`] = `
+{
+  "name": "test",
+  "short_name": "__tests__-2",
+  "description": "description",
+  "start_url": "./",
+  "lang": "de-DE",
+  "display": "browser",
+  "dir": "auto",
+  "background_color": "#fff",
+  "theme_color": "#fff",
+  "orientation": "any",
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.example.app1",
+      "id": "com.example.app1"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://itunes.apple.com/app/example-app1/id123456789"
+    }
+  ],
+  "scope": "/app/",
+  "categories": [
+    "books",
+    "education",
+    "medical"
+  ],
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "screenshots": [
+    {
+      "src": "screenshot1.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    },
+    {
+      "src": "screenshot2.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's agenda",
+      "url": "/today",
+      "description": "List of events planned for today"
+    },
+    {
+      "name": "New event",
+      "url": "/create/event"
+    },
+    {
+      "name": "New reminder",
+      "url": "/create/reminder"
+    }
+  ]
+}
+`;
+
+exports[`manifest-generator generate full Manifest file with fingerprint and localize 2`] = `
+{
+  "name": "test",
+  "short_name": "__tests__-2",
+  "description": "description",
+  "start_url": "./",
+  "lang": "en-US",
+  "display": "browser",
+  "dir": "auto",
+  "background_color": "#fff",
+  "theme_color": "#fff",
+  "orientation": "any",
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.example.app1",
+      "id": "com.example.app1"
+    },
+    {
+      "platform": "itunes",
+      "url": "https://itunes.apple.com/app/example-app1/id123456789"
+    }
+  ],
+  "scope": "/app/",
+  "categories": [
+    "books",
+    "education",
+    "medical"
+  ],
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "screenshots": [
+    {
+      "src": "screenshot1.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    },
+    {
+      "src": "screenshot2.webp",
+      "sizes": "1280x720",
+      "type": "image/webp"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's agenda",
+      "url": "/today",
+      "description": "List of events planned for today"
+    },
+    {
+      "name": "New event",
+      "url": "/create/event"
+    },
+    {
+      "name": "New reminder",
+      "url": "/create/reminder"
+    }
+  ]
+}
+`;

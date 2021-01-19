@@ -31,7 +31,7 @@
         "dev": "microbundle watch -i ./src/index.ts -o ./dist/index.js --no-pkg-main -f cjs --strict --raw --target node"
     },
     "dependencies": {
-        "clone": "^2.1.2",
+        "mime": "^2.5.0",
         "image-size": "^0.9.3",
         "jimp": "^0.16.1",
         "lodash.defaultsdeep": "^4.6.1",
@@ -53,6 +53,8 @@
         "@types/color-string": "^1.5.0",
         "@types/punycode": "^2.1.0",
         "@types/bcp-47": "^1.0.0",
+        "@types/mime": "^2.0.3",
+        "@types/sharp": "^0.27.1",
         "del-cli": "^3.0.1",
         "sharp": "^0.27.0"
     },
