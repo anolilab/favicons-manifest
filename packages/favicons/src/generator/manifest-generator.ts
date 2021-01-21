@@ -4,8 +4,9 @@ import bcp47 from "bcp-47"
 import { ucs2 } from "punycode/"
 import ajv from "./../ajv"
 import fingerprint from "./../utils/fingerprint"
+import getIconName from "../utils/get-icon-name"
 import WebManifestSchema from "../schema/web-manifest"
-import { InternalOptions } from "../types"
+import { FaviconFile, InternalOptions, LocalizeManifest, Logger, RelativeFunction } from "../types"
 
 const isNotSupportedColorValue = (color: ColorDescriptor, normalizedColorValue: string): boolean => {
     const hexWithAlphaRegex = /^#([0-9a-fA-F]{4}){1,2}$/
@@ -63,29 +64,34 @@ const checkShortNameIsRequired = (name: string): boolean => {
     return name.trim() !== "" && ucs2.decode(name).length > 12
 }
 
-const generator = (
-    options: InternalOptions
-): {
-    name: string
-    content: string
-}[] => {
+interface ExtendedManifest extends LocalizeManifest {
+    icons: {
+        src: string
+        sizes: string
+        type: string
+        purpose: string
+    }[]
+}
+
+const generator = (options: InternalOptions, relative: RelativeFunction, logger: Logger): FaviconFile[] => {
     if (options.manifest === undefined) {
         return []
     }
 
+    const htmlLogger = logger("manifest")
+
+    htmlLogger.log("")
+
     const validate = ajv.compile(WebManifestSchema)
 
-    const manifest = options.manifest
+    const manifest = options.manifest as ExtendedManifest
     const localize = manifest.localize || []
 
     delete manifest.crossOrigin
-    delete manifest.apple_status_bar_style
+    delete manifest.apple
     delete manifest.localize
 
-    const manifests: {
-        name: string
-        content: string
-    }[] = []
+    const manifests: FaviconFile[] = []
 
     if (manifest.background_color) {
         validateColor("background_color", manifest.background_color)
@@ -103,12 +109,44 @@ const generator = (
         throw new Error(`You must provide at least the "short_name" or "name" property.`)
     }
 
+    if (options.icons.android) {
+        manifest.icons = []
+
+        options.icons.android.forEach((settings) => {
+            if (settings.type === "ico") {
+                manifest.icons.push({
+                    src: relative(
+                        `${getIconName("android")}${settings.purpose !== "any" ? `-${settings.purpose}` : ""}.${
+                            settings.type
+                        }`
+                    ),
+                    sizes: settings.sizes.map((size) => `${size.width}x${size.height}`).join(" "),
+                    type: `image/${settings.type}`,
+                    purpose: settings.purpose,
+                })
+            } else {
+                settings.sizes.forEach((size) => {
+                    manifest.icons.push({
+                        src: relative(
+                            `${getIconName("android")}${settings.purpose !== "any" ? `-${settings.purpose}` : ""}-${
+                                size.width
+                            }x${size.height}${size.fingerprint ? `.${size.fingerprint}` : ""}.${settings.type}`
+                        ),
+                        sizes: `${size.width}x${size.height}`,
+                        type: `image/${settings.type}`,
+                        purpose: settings.purpose,
+                    })
+                })
+            }
+        })
+    }
+
     if (validate(manifest)) {
         const content = JSON.stringify(manifest, null, 2)
 
         manifests.push({
             name: `manifest${options.fingerprints ? `.${fingerprint(content)}` : ""}.webmanifest`,
-            content,
+            contents: content,
         })
     } else {
         for (const err of validate.errors as DefinedError[]) {
@@ -147,7 +185,7 @@ const generator = (
                 name: `manifest_${extendedManifest.lang}${
                     options.fingerprints ? `.${fingerprint(content)}` : ""
                 }.webmanifest`,
-                content,
+                contents: content,
             })
         } else {
             for (const err of validate.errors as DefinedError[]) {

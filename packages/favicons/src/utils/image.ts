@@ -1,4 +1,5 @@
 import FastXmlParser from "fast-xml-parser"
+import { SourceObject } from "../types"
 
 // sharp renders the SVG in its source width and height with 72 DPI which can
 // cause a blurry result in case the source SVG is defined in lower size than
@@ -16,13 +17,9 @@ import FastXmlParser from "fast-xml-parser"
 // For further information, see:
 // https://github.com/itgalaxy/favicons/issues/264
 
-export const ensureSize = (
-    svgSource: { size: { width: number; height: number }; file: string },
-    width: number,
-    height: number
-) => {
-    let svgWidth = svgSource.size.width
-    let svgHeight = svgSource.size.height
+export const ensureSize = (svgSource: SourceObject, width: number, height: number): Promise<string | Buffer> => {
+    let svgWidth = svgSource.size.width as number
+    let svgHeight = svgSource.size.height as number
 
     if (svgWidth >= width && svgHeight >= height) {
         // If the base SVG is large enough, it does not need to be modified.
@@ -44,9 +41,9 @@ export const ensureSize = (
     return resize(svgSource.file, svgWidth, svgHeight)
 }
 
-export const resize = (svgFile: string, width: number, height: number): Promise<Buffer> =>
+export const resize = (svgFile: Buffer, width: number, height: number): Promise<Buffer> =>
     new Promise((resolve, reject) => {
-        const jsonObject = FastXmlParser.parse(svgFile, {}, true)
+        const jsonObject = FastXmlParser.parse(svgFile.toString("utf8"), {}, true)
 
         jsonObject.svg.$.width = width
         jsonObject.svg.$.height = height

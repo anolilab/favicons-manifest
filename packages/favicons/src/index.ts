@@ -1,23 +1,30 @@
-import path from "path"
-import fs from "fs"
-import through2 from "through2"
-import jimp from "jimp"
-import mime from "mime"
-import File from "vinyl"
-import { Icons, InternalOptions, Options } from "./types"
-import { icons } from "./preset/recommended"
+import { Icons, InternalOptions, Logger, Options, Response, Source } from "./types"
+import { icons, manifest } from "./preset/recommended"
+import NullLogger from "./logger/null-logger"
+import htmlGenerator from "./generator/html-generator"
+import manifestGenerator from "./generator/manifest-generator"
+import imageGenerator from "./generator/image-generator"
+import browserConfigGenerator from "./generator/browserconfig-generator"
+import { relative } from "./utils/path"
 
-const supportedMimeTypes = [jimp.MIME_PNG, jimp.MIME_JPEG, jimp.MIME_BMP]
+type Callback = (error: Error | null, response?: Promise<Response>) => void
 
-const createFavicons = (options: InternalOptions, buffer: Buffer, platform: keyof Icons) => {}
+const favicons = async (
+    source: Source,
+    options: Options,
+    callback: Callback | undefined = undefined,
+    logger: Logger = NullLogger
+): Promise<Response | void> => {
+    if (!source) {
+        throw Error("Please specify a file path as a source")
+    }
 
-const favicons = (source: string, options: Options) => {
-    const config: InternalOptions = Object.assign(
+    let config: InternalOptions = Object.assign(
         {
             path: "/",
             pixelArt: false,
             fingerprints: true,
-            icons,
+            icons: icons,
             manifest: undefined,
             generators: {
                 html: true,
@@ -31,49 +38,72 @@ const favicons = (source: string, options: Options) => {
     if (config.manifest === undefined) {
         config.generators.manifest = false
         config.generators.browserconfig = false
-    } else if (config.manifest && !config.generators.manifest) {
-        config.generators.manifest = true
+    } else {
+        config = Object.assign(
+            {
+                manifest: manifest,
+            },
+            config
+        )
     }
 
-    const mimeType = mime.getType(source)
-
-    // if (mimeType && !supportedMimeTypes.includes(mimeType as any)) {
-    let buffer: Buffer
-
-    try {
-        buffer = fs.readFileSync(source)
-    } catch (err) {
-        throw new Error(`It was not possible to read '${source}'.`)
+    const defaultHtmlGeneratorConfig = {
+        android: true,
+        appleIcon: true,
+        appleStartup: true,
+        favicons: true,
+        window: false,
     }
 
-    const platforms = Object.keys(options.icons as Icons)
-        .filter((platform) => (options.icons as Icons)[platform as keyof Icons])
-        .sort((a, b) => {
-            if (a === "favicons") {
-                return -1
-            }
+    if (config.generators.html === true) {
+        config.generators.html = defaultHtmlGeneratorConfig
+    } else if (typeof config.generators.html === "object") {
+        config.generators.html = Object.assign(defaultHtmlGeneratorConfig, config.generators.html)
+    }
 
-            if (b === "favicons") {
-                return 1
-            }
+    if (typeof options.icons === "object") {
+        const optionsIcons = options.icons as Partial<Icons>
 
-            return a.localeCompare(b)
+        Object.keys(optionsIcons).forEach((platform) => {
+            if (typeof optionsIcons[platform] === "boolean") {
+                config.icons[platform] = []
+            }
         })
+    }
 
-    const data = []
+    const data: Response = {
+        images: [],
+        html: [],
+        files: [],
+    }
 
-    platforms.forEach((platform) => {
-        const icons = createFavicons(options, buffer, platform)
+    data.images = await imageGenerator(source, config, logger)
 
-        if (options.generators?.html) {
+    if (config.generators.html) {
+        data.html = htmlGenerator(config, (path: string) => relative(path, config.path), logger)
+    }
+
+    if (config.generators.manifest) {
+        data.files = manifestGenerator(config, (path: string) => relative(path, config.path, true), logger)
+    }
+
+    if (config.generators.browserconfig) {
+        const file = browserConfigGenerator(config, (path: string) => relative(path, config.path, true), logger)
+
+        if (file !== null) {
+            data.files.push(file)
         }
-        if (options.generators?.manifest) {
-        }
+    }
 
-        if (options.generators?.browserconfig) {
-        }
-    })
-    // }
+    if (callback) {
+        new Promise((resolve) => {
+            resolve(data)
+        })
+            .then((response) => callback(null, response as Promise<Response>))
+            .catch(callback)
+    }
+
+    return data
 }
 
 export default favicons

@@ -1,49 +1,58 @@
-import { InternalOptions } from "../types"
-import { DefinedError } from "ajv"
-import ajv from "./../ajv"
-import parser from "fast-xml-parser"
-import BrowserConfigSchema from "../schema/browserconfig.xml"
+import { FaviconFile, InternalOptions, Logger, RelativeFunction } from "../types"
+import getIconName from "../utils/get-icon-name"
 
-const j2xParser = parser.j2xParser
+const generator = (options: InternalOptions, relative: RelativeFunction, logger: Logger): FaviconFile | null => {
+    const browserConfigLogger = logger("browserconfig")
 
-const generator = (
-    options: InternalOptions,
-    icons
-): {
-    name: string
-    content: string
-} | null => {
     if (options.manifest === undefined) {
+        browserConfigLogger.log("No manifest configuration was found.")
+
         return null
     }
 
-    const validate = ajv.compile(BrowserConfigSchema)
+    if (options.icons.windows === undefined) {
+        browserConfigLogger.log("No windows icons was found.")
 
-    const browserConfig = {
-        browserconfig: {
-            msapplication: {
-                title: {
-                    TileColor: options.manifest.background_color,
-                    ...icons,
-                },
-            },
-        },
+        return null
     }
 
-    if (validate(browserConfig)) {
-        const parser = new j2xParser({ format: true })
+    const icons: string[] = []
 
-        return {
-            name: "browserconfig.xml",
-            content: parser.parse(browserConfig),
-        }
+    options.icons.windows.forEach((settings) => {
+        settings.sizes.forEach((size) => {
+            const src = relative(
+                `${getIconName("windows")}${settings.purpose !== "any" ? `-${settings.purpose}` : ""}-${size.width}x${
+                    size.height
+                }${size.fingerprint ? `.${size.fingerprint}` : ""}.${settings.type}`
+            )
+
+            icons.push(`<${size.format}${size.width}x${size.height}logo src="${src}" />`)
+        })
+    })
+
+    if (options.manifest.background_color === undefined) {
+        throw new Error(`Background color is needed for "TileColor"`)
     }
 
-    for (const err of validate.errors as DefinedError[]) {
-        throw new Error(`${err.propertyName}: ${err.message}`)
+    if (icons.length === 0) {
+        throw new Error(`No icons found for the browserconfig.xml`)
     }
 
-    return null
+    browserConfigLogger.log("Creating browserconfig.xml")
+
+    return {
+        name: "browserconfig.xml",
+        contents: `<?xml version="1.0" encoding="utf-8"?>
+<browserconfig>
+   <msapplication>
+     <tile>
+        ${icons.join("\n")}
+        <TileColor>${options.manifest.background_color}</TileColor>
+     </tile>
+   </msapplication>
+</browserconfig>
+`,
+    }
 }
 
 export default generator

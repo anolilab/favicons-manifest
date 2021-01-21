@@ -1,7 +1,10 @@
 import { wrap } from "jest-snapshot-serializer-raw"
 import manifestGenerator from "../../src/generator/manifest-generator"
 import fingerprint from "../../src/utils/fingerprint"
+import { relative } from "../../src/utils/path"
+import { icons as recommendedIcons } from "../../src/preset/recommended"
 import { InternalOptions } from "../../src/types"
+import NullLogger from "../../src/logger/null-logger"
 
 const manifest = {
     name: "test",
@@ -62,28 +65,38 @@ describe("manifest-generator", () => {
     it("generate full Manifest file", () => {
         expect.assertions(2)
 
-        const output = manifestGenerator({
-            manifest,
-        } as InternalOptions)
+        const output = manifestGenerator(
+            {
+                manifest,
+                icons: recommendedIcons,
+            } as InternalOptions,
+            (path) => relative(path, "/", true),
+            NullLogger
+        )
 
         const data = output[0]
 
         expect(data.name).toStrictEqual("manifest.webmanifest")
-        expect(wrap(data.content)).toMatchSnapshot()
+        expect(wrap(data.contents)).toMatchSnapshot()
     })
 
     it("generate full Manifest file with fingerprint", () => {
         expect.assertions(2)
 
-        const output = manifestGenerator({
-            manifest,
-            fingerprints: true,
-        } as InternalOptions)
+        const output = manifestGenerator(
+            {
+                manifest,
+                fingerprints: true,
+                icons: recommendedIcons,
+            } as InternalOptions,
+            (path) => relative(path, "/", true),
+            NullLogger
+        )
 
         const data = output[0]
 
-        expect(data.name).toStrictEqual(`manifest.${fingerprint(data.content)}.webmanifest`)
-        expect(wrap(data.content)).toMatchSnapshot()
+        expect(data.name).toStrictEqual(`manifest.${fingerprint(data.contents)}.webmanifest`)
+        expect(wrap(data.contents)).toMatchSnapshot()
     })
 
     it("generate full Manifest file with fingerprint and localize", () => {
@@ -94,18 +107,23 @@ describe("manifest-generator", () => {
             lang: "en-US",
         }
 
-        const output = manifestGenerator({
-            manifest: {
-                ...manifest,
-                localize: [usManifest],
-            },
-            fingerprints: true,
-        } as InternalOptions)
+        const output = manifestGenerator(
+            {
+                manifest: {
+                    ...manifest,
+                    localize: [usManifest],
+                },
+                fingerprints: true,
+                icons: recommendedIcons,
+            } as InternalOptions,
+            (path) => relative(path, "/", true),
+            NullLogger
+        )
 
-        expect(output[0].name).toStrictEqual(`manifest.${fingerprint(output[0].content)}.webmanifest`)
-        expect(wrap(output[0].content)).toMatchSnapshot()
+        expect(output[0].name).toStrictEqual(`manifest.${fingerprint(output[0].contents)}.webmanifest`)
+        expect(wrap(output[0].contents)).toMatchSnapshot()
 
-        expect(output[1].name).toStrictEqual(`manifest_en-US.${fingerprint(output[1].content)}.webmanifest`)
-        expect(wrap(output[1].content)).toMatchSnapshot()
+        expect(output[1].name).toStrictEqual(`manifest_en-US.${fingerprint(output[1].contents)}.webmanifest`)
+        expect(wrap(output[1].contents)).toMatchSnapshot()
     })
 })

@@ -1,8 +1,9 @@
 import { wrap } from "jest-snapshot-serializer-raw"
 import htmlGenerator from "../../src/generator/html-generator"
-import { icons } from "../../src/preset/recommended"
+import { icons as recommendedIcons } from "../../src/preset/recommended"
 import { relative } from "../../src/utils/path"
 import { InternalOptions, Manifest } from "../../src/types"
+import NullLogger from "../../src/logger/null-logger"
 
 const manifest: Manifest = {
     name: "test",
@@ -57,7 +58,74 @@ const manifest: Manifest = {
             url: "/create/reminder",
         },
     ],
-    apple_status_bar_style: "black-translucent",
+    apple: {
+        statusBarStyle: "black-translucent",
+        webAppCapable: true,
+    },
+}
+
+const iosIcons = {
+    ...recommendedIcons,
+    /* apple-touch-icon-57x57.png */
+    appleIcon: [
+        {
+            sizes: [
+                {
+                    width: 57,
+                    height: 57,
+                },
+                {
+                    width: 60,
+                    height: 60,
+                },
+                {
+                    width: 72,
+                    height: 72,
+                },
+                {
+                    width: 76,
+                    height: 76,
+                },
+                {
+                    width: 114,
+                    height: 114,
+                },
+                {
+                    width: 120,
+                    height: 120,
+                },
+                {
+                    width: 144,
+                    height: 144,
+                },
+                {
+                    width: 152,
+                    height: 152,
+                },
+                {
+                    width: 167,
+                    height: 167,
+                },
+                {
+                    width: 180,
+                    height: 180,
+                },
+                {
+                    width: 1024,
+                    height: 1024,
+                },
+            ],
+            type: "png",
+            transparent: true,
+            rotate: false,
+            offset: 0,
+            mask: false,
+            background: false,
+            overlayGlow: false,
+            overlayShadow: false,
+            purpose: "any",
+        },
+    ],
 }
 
 describe("html-generator", () => {
@@ -66,20 +134,55 @@ describe("html-generator", () => {
 
         const output = htmlGenerator(
             {
-                path: "http://example.com",
+                path: "/",
                 manifest,
-                icons: icons,
+                icons: recommendedIcons,
                 favicon: true,
                 generators: {
-                    html: true,
+                    html: {
+                        android: true,
+                        appleIcon: true,
+                        appleStartup: true,
+                        favicons: true,
+                        window: true,
+                    },
                     manifest: true,
                     browserconfig: true,
                 },
             } as InternalOptions,
-            (path) => relative(path, "/")
+            (path) => relative(path, "/"),
+            NullLogger
         )
 
-        expect(wrap(output)).toMatchSnapshot()
+        expect(wrap(output.join("\n"))).toMatchSnapshot()
+    })
+
+    it("generate full html file with local path and full apple icon list", () => {
+        expect.assertions(1)
+
+        const output = htmlGenerator(
+            {
+                path: "/",
+                manifest,
+                icons: iosIcons,
+                favicon: true,
+                generators: {
+                    html: {
+                        android: true,
+                        appleIcon: true,
+                        appleStartup: true,
+                        favicons: true,
+                        window: true,
+                    },
+                    manifest: true,
+                    browserconfig: true,
+                },
+            } as InternalOptions,
+            (path) => relative(path, "/"),
+            NullLogger
+        )
+
+        expect(wrap(output.join("\n"))).toMatchSnapshot()
     })
 
     it("generate full html file with url", () => {
@@ -87,20 +190,27 @@ describe("html-generator", () => {
 
         const output = htmlGenerator(
             {
-                path: "http://example.com",
+                path: "/",
                 manifest,
-                icons: icons,
+                icons: recommendedIcons,
                 favicon: true,
                 generators: {
-                    html: true,
+                    html: {
+                        android: true,
+                        appleIcon: true,
+                        appleStartup: true,
+                        favicons: true,
+                        window: true,
+                    },
                     manifest: true,
                     browserconfig: true,
                 },
             } as InternalOptions,
-            (path) => relative(path, "http://example.com")
+            (path) => relative(path, "http://example.com"),
+            NullLogger
         )
 
-        expect(wrap(output)).toMatchSnapshot()
+        expect(wrap(output.join("\n"))).toMatchSnapshot()
     })
 
     it("generate full html file without short_name", () => {
@@ -112,20 +222,27 @@ describe("html-generator", () => {
 
         const output = htmlGenerator(
             {
-                path: "http://example.com",
+                path: "/",
                 manifest: m,
-                icons: icons,
+                icons: recommendedIcons,
                 favicon: true,
                 generators: {
-                    html: true,
+                    html: {
+                        android: true,
+                        appleIcon: true,
+                        appleStartup: true,
+                        favicons: true,
+                        window: true,
+                    },
                     manifest: true,
                     browserconfig: true,
                 },
             } as InternalOptions,
-            (path) => relative(path, "/")
+            (path) => relative(path, "/"),
+            NullLogger
         )
 
-        expect(wrap(output)).toMatchSnapshot()
+        expect(wrap(output.join("\n"))).toMatchSnapshot()
     })
 
     it("generate full html file with favicon string", () => {
@@ -137,20 +254,27 @@ describe("html-generator", () => {
 
         const output = htmlGenerator(
             {
-                path: "http://example.com",
+                path: "/",
                 manifest: m,
-                icons: icons,
+                icons: recommendedIcons,
                 favicon: "favicon.test.ico",
                 generators: {
-                    html: true,
+                    html: {
+                        android: true,
+                        appleIcon: true,
+                        appleStartup: true,
+                        favicons: true,
+                        window: true,
+                    },
                     manifest: true,
                     browserconfig: true,
                 },
             } as InternalOptions,
-            (path) => relative(path, "/")
+            (path) => relative(path, "/"),
+            NullLogger
         )
 
-        expect(wrap(output)).toMatchSnapshot()
+        expect(wrap(output.join("\n"))).toMatchSnapshot()
     })
 
     it("generate html file without manifest", () => {
@@ -158,18 +282,93 @@ describe("html-generator", () => {
 
         const output = htmlGenerator(
             {
-                path: "http://example.com",
+                path: "/",
                 manifest: undefined,
-                icons: icons,
+                icons: recommendedIcons,
                 generators: {
-                    html: true,
+                    html: {
+                        android: true,
+                        appleIcon: true,
+                        appleStartup: true,
+                        favicons: true,
+                        window: true,
+                    },
                     manifest: false,
                     browserconfig: true,
                 },
             } as InternalOptions,
-            (path) => relative(path, "http://example.com")
+            (path) => relative(path, "http://example.com"),
+            NullLogger
         )
 
-        expect(wrap(output)).toMatchSnapshot()
+        expect(wrap(output.join("\n"))).toMatchSnapshot()
+    })
+
+    it("generate full html file with local path and without apple statusbar and capable", () => {
+        expect.assertions(1)
+
+        const output = htmlGenerator(
+            {
+                path: "/",
+                manifest: {
+                    ...manifest,
+                    apple: {
+                        statusBarStyle: undefined,
+                        webAppCapable: undefined,
+                    },
+                },
+                icons: iosIcons,
+                favicon: true,
+                generators: {
+                    html: {
+                        android: true,
+                        appleIcon: true,
+                        appleStartup: true,
+                        favicons: true,
+                        window: true,
+                    },
+                    manifest: true,
+                    browserconfig: true,
+                },
+            } as InternalOptions,
+            (path) => relative(path, "/"),
+            NullLogger
+        )
+
+        expect(wrap(output.join("\n"))).toMatchSnapshot()
+    })
+
+    it("generate full html file with full false list on html generator", () => {
+        expect.assertions(1)
+
+        const output = htmlGenerator(
+            {
+                path: "/",
+                manifest: {
+                    ...manifest,
+                    apple: {
+                        statusBarStyle: undefined,
+                        webAppCapable: undefined,
+                    },
+                },
+                icons: iosIcons,
+                favicon: true,
+                generators: {
+                    html: {
+                        android: false,
+                        appleIcon: false,
+                        appleStartup: false,
+                        favicons: false,
+                        window: false,
+                    },
+                    manifest: true,
+                    browserconfig: true,
+                },
+            } as InternalOptions,
+            (path) => relative(path, "/"),
+            NullLogger
+        )
+
+        expect(wrap(output.join("\n"))).toMatchSnapshot()
     })
 })

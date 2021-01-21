@@ -1,21 +1,13 @@
 import { Icons, Manifest } from "../types"
 
 export const icons: Icons = {
-    // android-chrome-144x144.png
     android: [
         {
+            /* android-chrome-widthxheight.png */
             sizes: [
                 {
-                    width: 144,
-                    height: 144,
-                },
-                {
-                    width: 256,
-                    height: 256,
-                },
-                {
-                    width: 384,
-                    height: 384,
+                    width: 192,
+                    height: 192,
                 },
                 {
                     width: 512,
@@ -30,41 +22,14 @@ export const icons: Icons = {
             background: false,
             overlayGlow: false,
             overlayShadow: false,
+            purpose: "any",
         },
-        // "android-chrome-maskable-36x36.png"
         {
+            /* android-chrome-maskable-36x36.png */
             sizes: [
-                {
-                    width: 36,
-                    height: 36,
-                },
-                {
-                    width: 48,
-                    height: 48,
-                },
-                {
-                    width: 72,
-                    height: 72,
-                },
-                {
-                    width: 96,
-                    height: 96,
-                },
-                {
-                    width: 144,
-                    height: 144,
-                },
                 {
                     width: 192,
                     height: 192,
-                },
-                {
-                    width: 256,
-                    height: 256,
-                },
-                {
-                    width: 384,
-                    height: 384,
                 },
                 {
                     width: 512,
@@ -79,55 +44,39 @@ export const icons: Icons = {
             background: false,
             overlayGlow: false,
             overlayShadow: false,
+            purpose: "maskable",
         },
     ],
     appleIcon: [
         {
-            //"apple-touch-icon-57x57.png"
+            /* apple-touch-icon-widthxheight.png */
             sizes: [
-                {
-                    width: 57,
-                    height: 57,
-                },
-                {
-                    width: 60,
-                    height: 60,
-                },
-                {
-                    width: 72,
-                    height: 72,
-                },
-                {
-                    width: 76,
-                    height: 76,
-                },
-                {
-                    width: 114,
-                    height: 114,
-                },
-                {
-                    width: 120,
-                    height: 120,
-                },
-                {
-                    width: 144,
-                    height: 144,
-                },
-                {
-                    width: 152,
-                    height: 152,
-                },
-                {
-                    width: 167,
-                    height: 167,
-                },
+                /**
+                 * See webhint explanation on why a single 180x180 touch icon might be the best solution: [https://webhint.io/docs/user-guide/hints/hint-apple-touch-icons/](https://webhint.io/docs/user-guide/hints/hint-apple-touch-icons/):
+                 *
+                 * Over time as Apple released different size displays for their devices, the requirements for the size of the touch icon have changed quite a bit \[...\]. Declaring one 180×180px PNG image, e.g.:
+                 *
+                 * ```html
+                 *   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+                 * ```
+                 *
+                 * in the <head> of the page is enough, and including all the different sizes is not recommended as:
+                 *
+                 * - It will increase the size of the pages with very little to no real benefit (most users will probably not add the site to their home screens).
+                 *
+                 * - Most sizes will probably never be used as iOS devices get upgraded quickly, so [most iOS users will be on the latest 2 versions of iOS]app store stats and using newer devices.
+                 *
+                 * - The 180×180px image, if needed, [will be automatically downscaled by Safari, and the result of the scaling is generally ok][icon scaling].
+                 *
+                 * The only downside to using one icon is that some users will load a larger image, while a much smaller file would have worked just as well. But the chance of that happening decreases with every day as users upgrade their devices and their iOS version.
+                 */
                 {
                     width: 180,
                     height: 180,
                 },
                 {
-                    width: 1024,
-                    height: 1024,
+                    width: 192,
+                    height: 192,
                 },
             ],
             type: "png",
@@ -138,6 +87,7 @@ export const icons: Icons = {
             background: false,
             overlayGlow: false,
             overlayShadow: false,
+            purpose: "any",
         },
     ],
     // Device              Portrait size      Landscape size     Screen size        Pixel ratio
@@ -160,7 +110,7 @@ export const icons: Icons = {
     // 12.9" iPad Pro      2048px × 2732px    2732px × 2048px    1024px × 1366px    2
     appleStartup: [
         {
-            // "apple-touch-startup-image-750x1334.png":
+            /* apple-touch-startup-image-widthxheight.png */
             sizes: [
                 {
                     width: 640,
@@ -347,6 +297,8 @@ export const icons: Icons = {
             background: false,
             overlayGlow: false,
             overlayShadow: false,
+            purpose: "any",
+            darkMode: false
         },
     ],
     favicons: [
@@ -373,6 +325,7 @@ export const icons: Icons = {
             background: false,
             overlayGlow: false,
             overlayShadow: false,
+            purpose: "any",
         },
         {
             sizes: [
@@ -381,20 +334,12 @@ export const icons: Icons = {
                     height: 16,
                 },
                 {
-                    width: 24,
-                    height: 24,
-                },
-                {
                     width: 32,
                     height: 32,
                 },
                 {
                     width: 48,
                     height: 48,
-                },
-                {
-                    width: 64,
-                    height: 64,
                 },
             ],
             type: "ico",
@@ -405,31 +350,17 @@ export const icons: Icons = {
             background: false,
             overlayGlow: false,
             overlayShadow: false,
+            purpose: "any",
         },
     ],
     windows: [
         {
-            // "mstile-70x70.png"
+            /* mstile-widthxheight.png */
             sizes: [
-                {
-                    width: 70,
-                    height: 70,
-                },
-                {
-                    width: 144,
-                    height: 144,
-                },
                 {
                     width: 150,
                     height: 150,
-                },
-                {
-                    width: 310,
-                    height: 150,
-                },
-                {
-                    width: 310,
-                    height: 310,
+                    format: "square"
                 },
             ],
             type: "png",
@@ -440,6 +371,7 @@ export const icons: Icons = {
             background: false,
             overlayGlow: false,
             overlayShadow: false,
+            purpose: "any",
         },
     ],
 }
@@ -451,5 +383,8 @@ export const manifest: Partial<Manifest> = {
     orientation: "any",
     background_color: "#ffffff",
     theme_color: "#ffffff",
-    apple_status_bar_style: "black-translucent",
+    apple: {
+        statusBarStyle: "black-translucent",
+        webAppCapable: true
+    }
 }

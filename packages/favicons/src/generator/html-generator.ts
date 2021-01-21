@@ -1,8 +1,9 @@
 import escapeHtml from "escape-html"
-import { InternalOptions, RelativeFunction } from "../types"
+import getIconName from "../utils/get-icon-name"
+import { InternalOptions, Logger, RelativeFunction } from "../types"
 
 const generators: {
-    [key: string]: ((options: InternalOptions, relative: RelativeFunction) => string)[]
+    [key: string]: ((options: InternalOptions, relative: RelativeFunction, platform: string) => string | string[])[]
 } = {
     android: [
         (options, relative: RelativeFunction) => {
@@ -39,33 +40,44 @@ const generators: {
         },
     ],
     appleIcon: [
-        (options, relative) =>
-            options.icons.appleIcon
-                .map((settings) => {
-                    const icons: string[] = []
+        (options, relative, platform) => {
+            const icons: string[] = []
 
-                    settings.sizes.forEach((icon) => {
-                        icons.push(
-                            `<link rel="apple-touch-icon" sizes="${icon.width}x${icon.height}" href="${relative(
-                                `apple-touch-icon-${icon.width}x${icon.height}${
-                                    settings.fingerprint ? `.${settings.fingerprint}` : ""
-                                }.${settings.type}`
-                            )}" />`
-                        )
-                    })
-
-                    return icons.join("\n")
+            options.icons.appleIcon.forEach((settings) => {
+                settings.sizes.forEach((size) => {
+                    icons.push(
+                        `<link rel="apple-touch-icon" sizes="${size.width}x${size.height}" href="${relative(
+                            `${getIconName(platform)}-${size.width}x${size.height}${
+                                size.fingerprint ? `.${size.fingerprint}` : ""
+                            }.${settings.type}`
+                        )}" />`
+                    )
                 })
-                .join(""),
-        (options) => (options.manifest ? `<meta name="apple-mobile-web-app-capable" content="yes" />` : ""),
+            })
+
+            return icons
+        },
         (options) => {
             if (options.manifest === undefined) {
                 return ""
             }
 
-            if (options.manifest.apple_status_bar_style) {
+            if (options.manifest.apple?.webAppCapable !== undefined) {
+                return `<meta name="apple-mobile-web-app-capable" content="${
+                    options.manifest.apple.webAppCapable ? "yes" : "no"
+                }" />`
+            }
+
+            return ""
+        },
+        (options) => {
+            if (options.manifest === undefined) {
+                return ""
+            }
+
+            if (options.manifest.apple?.statusBarStyle) {
                 return `<meta name="apple-mobile-web-app-status-bar-style" content="${escapeHtml(
-                    options.manifest.apple_status_bar_style
+                    options.manifest.apple?.statusBarStyle
                 )}" />`
             }
 
@@ -86,28 +98,36 @@ const generators: {
         },
     ],
     appleStartup: [
-        (options, relative) =>
-            options.icons.appleStartup
-                .map((settings): string => {
-                    let icons: string[] = []
+        (options, relative, platform) => {
+            if (
+                options.manifest === undefined ||
+                (options.manifest &&
+                    options.manifest.apple?.webAppCapable !== undefined &&
+                    options.manifest.apple?.webAppCapable === false)
+            ) {
+                return ""
+            }
 
-                    settings.sizes.forEach((icon) => {
-                        icons.push(
-                            `<link rel="apple-touch-startup-image" media="(width: ${icon.dwidth}px) and (height: ${
-                                icon.dheight
-                            }px) and (-webkit-device-pixel-ratio: ${icon.pixelRatio}) and (orientation: ${
-                                icon.orientation
-                            })" href="${relative(
-                                `apple-touch-startup-image-${icon.width}x${icon.height}${
-                                    settings.fingerprint ? `.${settings.fingerprint}` : ""
-                                }.${settings.type}`
-                            )}" />`
-                        )
-                    })
+            const icons: string[] = []
 
-                    return icons.join("\n")
+            options.icons.appleStartup.forEach((settings) => {
+                settings.sizes.forEach((size) => {
+                    icons.push(
+                        `<link rel="apple-touch-startup-image" media="(device-width: ${
+                            size.dwidth
+                        }px) and (device-height: ${size.dheight}px) and (-webkit-device-pixel-ratio: ${
+                            size.pixelRatio
+                        }) and (orientation: ${size.orientation})" href="${relative(
+                            `${getIconName(platform)}}-${size.width}x${size.height}${
+                                size.fingerprint ? `.${size.fingerprint}` : ""
+                            }.${settings.type}`
+                        )}" />`
+                    )
                 })
-                .join(""),
+            })
+
+            return icons
+        },
     ],
     favicons: [
         (options, relative: RelativeFunction) => {
@@ -127,28 +147,27 @@ const generators: {
 
             return ""
         },
-        (options, relative) =>
-            options.icons.favicons
-                .map((settings) => {
-                    const icons: string[] = []
+        (options, relative, platform) => {
+            const icons: string[] = []
 
-                    if (settings.type === "png") {
-                        settings.sizes.forEach((icon) => {
-                            icons.push(
-                                `<link rel="icon" type="image/${settings.type}" sizes="${icon.width}x${
-                                    icon.height
-                                }" href="${relative(
-                                    `favicon-${icon.width}x${icon.height}${
-                                        settings.fingerprint ? `.${settings.fingerprint}` : ""
-                                    }.${settings.type}`
-                                )}" />`
-                            )
-                        })
-                    }
+            options.icons.favicons.forEach((settings) => {
+                if (settings.type === "png") {
+                    settings.sizes.forEach((size) => {
+                        icons.push(
+                            `<link rel="icon" type="image/${settings.type}" sizes="${size.width}x${
+                                size.height
+                            }" href="${relative(
+                                `${getIconName(platform)}-${size.width}x${size.height}${
+                                    size.fingerprint ? `.${size.fingerprint}` : ""
+                                }.png`
+                            )}" />`
+                        )
+                    })
+                }
+            })
 
-                    return icons.join("\n")
-                })
-                .join(""),
+            return icons
+        },
     ],
     windows: [
         (options) => {
@@ -162,7 +181,7 @@ const generators: {
 
             return ""
         },
-        (options, relative: RelativeFunction) => {
+        (options, relative: RelativeFunction, platform) => {
             let hasIcon = false
             let fingerprint
 
@@ -170,14 +189,14 @@ const generators: {
                 icon.sizes.forEach((size) => {
                     if (!hasIcon && size.height === 144 && size.width === 144) {
                         hasIcon = true
-                        fingerprint = icon.fingerprint || undefined
+                        fingerprint = size.fingerprint || undefined
                     }
                 })
             })
 
             if (hasIcon) {
                 return `<meta name="msapplication-TileImage" content="${relative(
-                    `mstile-144x144${fingerprint ? `.${fingerprint}` : ""}.png`
+                    `${getIconName(platform)}-144x144${fingerprint ? `.${fingerprint}` : ""}.png`
                 )} /">`
             }
 
@@ -190,16 +209,37 @@ const generators: {
     ],
 }
 
-const generator = (options: InternalOptions, relative: RelativeFunction): string => {
+const generator = (options: InternalOptions, relative: RelativeFunction, logger: Logger): string[] => {
     let html: string[] = []
 
-    Object.keys(options.icons).forEach((platform) => {
+    const htmlLogger = logger("html")
+
+    htmlLogger.log("Creating html content")
+
+    Object.keys(options.icons).forEach((platform: string) => {
+        // @ts-ignore
+        if (typeof options.generators.html === "object" && options.generators.html[platform] === false) {
+            return
+        }
+
         if (options.icons[platform] && generators[platform] !== undefined) {
-            html = html.concat(generators[platform].map((f) => f(options, relative)))
+            const response = generators[platform].map((f) => f(options, relative, platform))
+
+            if (Array.isArray(response)) {
+                response.forEach((r) => {
+                    if (Array.isArray(r)) {
+                        html = html.concat(r)
+                    } else {
+                        html.push(r)
+                    }
+                })
+            } else {
+                html.push(response)
+            }
         }
     })
 
-    return html.filter((h) => h !== "").join("\n")
+    return html.filter((h) => h !== "")
 }
 
 export default generator

@@ -1,3 +1,7 @@
+import { ISizeCalculationResult } from "image-size/dist/types/interface"
+
+export type SourceObject = { size: ISizeCalculationResult; file: Buffer }
+
 export type RelativeFunction = (path: string) => string
 
 export interface FaviconImage {
@@ -10,7 +14,7 @@ export interface FaviconFile {
     contents: string
 }
 
-export interface FaviconResponse {
+export interface Response {
     images: FaviconImage[]
     files: FaviconFile[]
     html: string[]
@@ -30,8 +34,6 @@ export interface IconSetting {
 
     /**
      * Apply mask in order to create circle icon
-     *
-     * @see https://web.dev/maskable-icon/
      */
     mask: boolean
 
@@ -50,13 +52,47 @@ export interface IconSetting {
     sizes: {
         width: number
         height: number
+
+        /** @internal */
+        fingerprint?: string
     }[]
 
-    /** @internal */
-    fingerprint?: string
+    /**
+     * Defines the purpose of the image, for example if the image is intended to serve some special purpose in the context of the host OS (i.e., for better integration).
+     *
+     * purpose can have one or more of the following values, separated by spaces:
+     *
+     * monochrome: A user agent can present this icon where a monochrome icon with a solid fill is needed. The color information in the icon is discarded and only the alpha data is used. The icon can then be used by the user agent like a mask over any solid fill.
+     * maskable: The image is designed with icon masks and safe zone in mind, such that any part of the image outside the safe zone can safely be ignored and masked away by the user agent.
+     * any: The user agent is free to display the icon in any context (this is the default value).
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/Manifest/icons
+     * @see https://web.dev/maskable-icon/
+     */
+    purpose:
+        | "monochrome"
+        | "maskable"
+        | "any"
+        | "monochrome maskable"
+        | "monochrome any"
+        | "maskable monochrome"
+        | "maskable any"
+        | "any monochrome"
+        | "any maskable"
+        | "monochrome maskable any"
+        | "monochrome any maskable"
+        | "maskable monochrome any"
+        | "maskable any monochrome"
+        | "any monochrome maskable"
+        | "any maskable monochrome"
 }
 
-export interface AppleIconSetting extends IconSetting {
+export interface AppleStartupSetting extends IconSetting {
+    /**
+     * Supports dark mode splash screens on iOS! So, you can provide both light and dark splash screen images to differentiate your apps look & feel based on user preference.
+     */
+    darkMode: boolean
+
     sizes: {
         width: number
         height: number
@@ -64,6 +100,20 @@ export interface AppleIconSetting extends IconSetting {
         dheight: number
         pixelRatio: number
         orientation: "portrait" | "landscape"
+
+        /** @internal */
+        fingerprint?: string
+    }[]
+}
+
+export interface WindowsSetting extends IconSetting {
+    sizes: {
+        width: number
+        height: number
+        format: "square" | "wide"
+
+        /** @internal */
+        fingerprint?: string
     }[]
 }
 
@@ -73,23 +123,23 @@ export interface AppleIconSetting extends IconSetting {
  */
 
 export interface Icons {
-    /* Create Android homescreen icon. */
+    /** Create Android homescreen icon. */
     android: boolean | IconSetting[]
 
-    /* Create Apple touch icons. */
+    /** Create Apple touch icons. */
     appleIcon: boolean | IconSetting[]
 
-    /* Create Apple startup assets. */
-    appleStartup: boolean | AppleIconSetting[]
+    /** Create Apple startup assets. */
+    appleStartup: boolean | AppleStartupSetting[]
 
-    /* Create regular icons. */
+    /** Create regular icons. */
     favicons: boolean | IconSetting[]
 
-    /* Create Windows 8 tile icons. */
-    windows: boolean | IconSetting[]
+    /** Create Windows 8 tile icons. */
+    windows: boolean | WindowsSetting[]
 
     /** For extra icons */
-    [key: string]: boolean | IconSetting[] | AppleIconSetting[]
+    [key: string]: boolean | IconSetting[] | AppleStartupSetting[] | WindowsSetting[]
 }
 
 /** More info can be found on https://web.dev/add-manifest/ */
@@ -307,10 +357,14 @@ export interface Manifest {
         }[]
     }[]
 
-    /**
-     * Style for Apple status bar @default 'black-translucent'
-     */
-    apple_status_bar_style?: "black-translucent" | "default" | "black"
+    apple?: {
+        /**
+         * Style for Apple status bar @default 'black-translucent'
+         */
+        statusBarStyle?: "black-translucent" | "default" | "black"
+
+        webAppCapable?: boolean
+    }
 }
 
 export interface LocalizeManifest extends Manifest {
@@ -334,6 +388,8 @@ export interface Options {
     /** Adds fingerprint to all generated files @default true */
     fingerprints?: boolean
 
+    darkMode?: boolean
+
     /**
      * Favicons configuration option
      */
@@ -345,7 +401,15 @@ export interface Options {
     manifest?: LocalizeManifest
 
     generators?: Partial<{
-        html: boolean
+        html:
+            | boolean
+            | Partial<{
+                  android: boolean
+                  appleIcon: boolean
+                  appleStartup: boolean
+                  favicons: boolean
+                  window: boolean
+              }>
         /** @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/dn320426(v=vs.85)?redirectedfrom=MSDN */
         manifest: boolean
         browserconfig: boolean
@@ -353,17 +417,65 @@ export interface Options {
 }
 
 export interface InternalOptions extends Options {
+    pixelArt: boolean
+
+    fingerprints: boolean
+
+    darkMode: boolean
+
     icons: {
         android: IconSetting[]
         appleIcon: IconSetting[]
-        appleStartup: AppleIconSetting[]
+        appleStartup: AppleStartupSetting[]
         favicons: IconSetting[]
-        windows: IconSetting[]
-        [key: string]: IconSetting[] | AppleIconSetting[]
+        windows: WindowsSetting[]
+        [key: string]: IconSetting[] | AppleStartupSetting[] | WindowsSetting[]
     }
     generators: {
-        html: boolean
+        html:
+            | boolean
+            | {
+                  android: boolean
+                  appleIcon: boolean
+                  appleStartup: boolean
+                  favicons: boolean
+                  window: boolean
+              }
         manifest: boolean
         browserconfig: boolean
     }
+}
+
+export type Source =
+    | string
+    | Buffer
+    | {
+          icon: string | Buffer
+          apple: {
+              splashScreen:
+                  | string
+                  | Buffer
+                  | {
+                        light?: string | Buffer
+                        dark?: string | Buffer
+                    }
+          }
+      }
+
+export interface LoggerFunction {
+    raw(...args: string[]): void
+    log(...args: string[]): void
+    warn(...args: string[]): void
+    trace(...args: string[]): void
+    error(...args: string[]): void
+    success(...args: string[]): void
+}
+
+/**
+ * Logger function to print out steps of the lib
+ *
+ * @param prefix - Shows the origin of the log, e.g. function name
+ */
+export interface Logger {
+    (prefix: string): LoggerFunction
 }
