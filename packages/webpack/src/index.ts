@@ -23,7 +23,6 @@ class FaviconsManifestWebpackPlugin {
             prefix: "assets/",
             loadManifestWithCredentials: true,
             pixelArt: false,
-            manifest: {},
             ...options,
         }
     }
@@ -136,7 +135,7 @@ class FaviconsManifestWebpackPlugin {
             case "light":
                 if (!this.options.mode) {
                     compilation.logger.info(
-                        "icons-webpack-plugin - generate only a single favicon for fast compilation time in development mode. This behaviour can be changed by setting the favicon mode option."
+                        "@anolilab/favicons-manifest-webpack-plugin - generate only a single favicon for fast compilation time in development mode. This behaviour can be changed by setting the favicon mode option."
                     )
                 }
 
@@ -197,38 +196,9 @@ class FaviconsManifestWebpackPlugin {
                 {
                     path: resolvedPublicPath,
                     pixel_art: this.options.pixelArt,
-                    loadManifestWithCredentials: this.options.loadManifestWithCredentials,
                 }
             )
         )
-
-        // We enrich the manifest.json with custom values from options.appConfig
-        // if they are not supported in the icons plugin
-        const {
-            scope = undefined,
-            prefer_related_applications = undefined,
-            related_applications = undefined,
-        } = this.options.manifest
-
-        if (scope || prefer_related_applications || related_applications) {
-            const manifestIndex = files.findIndex(({ name }: { name: string }) => name === "manifest.json")
-            const manifestContent = JSON.parse(files[manifestIndex].contents)
-
-            files[manifestIndex].contents = Buffer.from(
-                JSON.stringify(
-                    {
-                        ...manifestContent,
-                        ...{ scope },
-                        ...(prefer_related_applications &&
-                        (!related_applications || (related_applications && related_applications.length === 0))
-                            ? { prefer_related_applications }
-                            : { prefer_related_applications, related_applications }),
-                    },
-                    null,
-                    4
-                )
-            )
-        }
 
         const assets = [...images, ...files].map(({ name, contents }) => ({
             name: outputPath ? path.join(outputPath, name) : (name as string),
@@ -239,7 +209,7 @@ class FaviconsManifestWebpackPlugin {
     }
 
     /**
-     * Returns wether the plugin should generate a light version or a full webapp
+     * Returns whatever the plugin should generate a light version or a full webapp
      */
     getCurrentCompilationMode(compiler: Compiler) {
         // From https://github.com/webpack/webpack/blob/3366421f1784c449f415cda5930a8e445086f688/lib/WebpackOptionsDefaulter.js#L12-L14
@@ -343,10 +313,10 @@ function getHtmlWebpackPluginVersion() {
  */
 const loadFaviconsLibrary = () => {
     try {
-        return require("icons")
+        return require("@anolilab/favicons-manifest")
     } catch (e) {
         throw new Error(
-            'Could not find the npm peerDependency "icons".\nPlease run:\nnpm i icons\n - or -\nyarn add icons\n\n' +
+            'Could not find the npm peerDependency "icons".\nPlease run:\nnpm i @anolilab/favicons-manifest\n - or -\nyarn add @anolilab/favicons-manifest\n\n' +
                 String(e)
         )
     }

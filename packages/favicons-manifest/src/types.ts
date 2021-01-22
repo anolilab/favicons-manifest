@@ -374,6 +374,22 @@ export interface LocalizeManifest extends Manifest {
     localize?: Manifest[]
 }
 
+export type Source =
+    | string
+    | Buffer
+    | {
+    icon: string | Buffer
+    apple: {
+        splashScreen:
+            | string
+            | Buffer
+            | {
+            light?: string | Buffer
+            dark?: string | Buffer
+        }
+    }
+}
+
 export interface Options {
     /**
      * Path for overriding default icons path.
@@ -462,22 +478,6 @@ export interface InternalOptions extends Options {
         browserconfig: boolean
     }
 }
-
-export type Source =
-    | string
-    | Buffer
-    | {
-          icon: string | Buffer
-          apple: {
-              splashScreen:
-                  | string
-                  | Buffer
-                  | {
-                        light?: string | Buffer
-                        dark?: string | Buffer
-                    }
-          }
-      }
 
 export interface LoggerFunction {
     raw(...args: string[]): void

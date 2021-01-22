@@ -1,4 +1,5 @@
 import { sources } from "webpack"
+import { Source } from "@anolilab/favicons-manifest"
 
 export type CompilationResult = {
     assets: { name: string; contents: sources.RawSource }[]
@@ -6,7 +7,7 @@ export type CompilationResult = {
 }
 
 export type FaviconsGenerator = (
-    logoSource: Buffer | string,
+    logoSource: Source,
     compilation: any,
     resolvedPublicPath: string,
     outputPath: string

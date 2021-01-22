@@ -7,12 +7,8 @@ import imageGenerator from "./generator/image-generator"
 import browserConfigGenerator from "./generator/browserconfig-generator"
 import { relative } from "./utils/path"
 
-export {
-    htmlGenerator,
-    manifestGenerator,
-    imageGenerator,
-    browserConfigGenerator
-}
+export { htmlGenerator, manifestGenerator, imageGenerator, browserConfigGenerator }
+export { Logger, LocalizeManifest, Icons, IconSetting, AppleStartupSetting, WindowsSetting, Response, Source } from "./types"
 
 type Callback = (error: Error | null, response?: Promise<Response>) => void
 

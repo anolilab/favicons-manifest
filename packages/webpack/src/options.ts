@@ -1,4 +1,4 @@
-import { IconOptions } from "icons"
+import { Icons, LocalizeManifest } from "@anolilab/favicons-manifest"
 
 export interface PluginOptions {
     /** our source logo - can be png or svg (required) */
@@ -16,11 +16,6 @@ export interface PluginOptions {
     pixelArt?: boolean
 
     /**
-     * Browsers don't send cookies when fetching a manifest, enable this to fix that.
-     */
-    loadManifestWithCredentials?: boolean
-
-    /**
      *
      * Inject html links/metadata (requires html-webpack-plugin).
      * This option accepts arguments of different types:
@@ -36,103 +31,17 @@ export interface PluginOptions {
 
     /**
      * Favicons configuration option
-     * @see https://github.com/itgalaxy/favicons
+     *
+     * @see https://github.com/anolilab/favicons-manifest/tree/main/packages/favicons-manifest
      */
-    favicons?: Partial<{
-        /* Create Android homescreen icon. */
-        android: boolean | IconOptions
-        /* Create Apple touch icons. */
-        appleIcon: boolean | IconOptions
-        /* Create Apple startup assets. */
-        appleStartup: boolean | IconOptions
-        /* Create Opera Coast icon. */
-        coast: boolean | IconOptions
-        /* Create regular icons. */
-        favicons: boolean | IconOptions
-        /* Create Firefox OS icons. */
-        firefox: boolean | IconOptions
-        /* Create Windows 8 tile icons. */
-        windows: boolean | IconOptions
-        /* Create Yandex browser icon. */
-        yandex: boolean | IconOptions
-    }>
+    favicons?: Partial<Icons>
 
-    manifest?: {
-        /**
-         * Your application's name @default null
-         */
-        appName?: string | null
-
-        /**
-         * Your application's short_name.
-         * @default appName
-         */
-        appShortName?: string | null
-
-        /**
-         * Your application's description @default null
-         */
-        appDescription?: string | null
-
-        /**
-         * Your (or your developer's) name @default null
-         */
-        developerName?: string | null
-
-        /**
-         * Your (or your developer's) URL @default null
-         */
-        developerURL?: string | null
-
-        /**
-         * Your application's version string @default '1.0'
-         */
-        version?: string
-
-        /**
-         * Primary text direction for name, short_name, and description @default 'auto'
-         */
-        dir?: string
-
-        /** Primary language for name and short_name @default 'en-US' */
-        lang?: string
-
-        /** Background colour for flattened icons @default '#fff' */
-        background?: string
-
-        /** Theme color user for example in Android's task switcher @default '#fff' */
-        theme_color?: string
-
-        /** Style for Apple status bar @default 'black-translucent' */
-        appleStatusBarStyle?: "black-translucent" | "default" | "black"
-
-        /** Preferred display mode: 'fullscreen', 'standalone', 'minimal-ui' or 'browser' @default 'standalone' */
-        display?: "fullscreen" | "standalone" | "minimal-ui" | "browser"
-
-        /** Default orientation: 'any', 'natural', 'portrait' or 'landscape' @default 'any' */
-        orientation?:
-            | "any"
-            | "natural"
-            | "landscape"
-            | "landscape-primary"
-            | "landscape-secondary"
-            | "portrait"
-            | "portrait-primary"
-            | "portrait-secondary"
-
-        /** Should the browser prompt the user to install the native companion app. */
-        prefer_related_applications?: boolean
-
-        /** Information about the native companion apps. This will only be used if `preferRelatedApplications` is `true`. */
-        related_applications?: {
-            platform: string
-            url: string
-            id: string
-        }[]
-
-        /** set of URLs that the browser considers within your app */
-        scope?: string
-    }
+    /**
+     * Manifest configuration option
+     *
+     * @see https://github.com/anolilab/favicons-manifest/tree/main/packages/favicons-manifest
+     */
+    manifest?: LocalizeManifest
 
     /**
      * Favicon generation modes
