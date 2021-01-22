@@ -44,7 +44,7 @@
         "ajv-formats": "^1.5.1"
     },
     "devDependencies": {
-        "@types/node": "^12.19.14",
+        "@types/node": "12.19.15",
         "@types/tinycolor2": "^1.4.2",
         "@types/escape-html": "^1.0.0",
         "@types/color-string": "^1.5.0",
