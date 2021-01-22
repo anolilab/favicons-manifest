@@ -36,9 +36,9 @@
     },
     "devDependencies": {
         "@types/favicons": "6.2.0",
-        "@types/next": "^9.0.0",
-        "@babel/plugin-proposal-optional-chaining": "^7.12.7",
-        "del-cli": "^3.0.1"
+        "@types/next": "9.0.0",
+        "@babel/plugin-proposal-optional-chaining": "7.12.7",
+        "del-cli": "3.0.1"
     },
     "peerDependencies": {
         "next": "^9.5.5 || ^10.0.0"
