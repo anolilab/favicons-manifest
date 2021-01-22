@@ -10,7 +10,7 @@ const logger: Logger = () => {
         trace: nullFunction,
         error: nullFunction,
         success: nullFunction,
-    };
+    }
 }
 
-export default logger;
+export default logger

@@ -7,6 +7,13 @@ import imageGenerator from "./generator/image-generator"
 import browserConfigGenerator from "./generator/browserconfig-generator"
 import { relative } from "./utils/path"
 
+export {
+    htmlGenerator,
+    manifestGenerator,
+    imageGenerator,
+    browserConfigGenerator
+}
+
 type Callback = (error: Error | null, response?: Promise<Response>) => void
 
 const favicons = async (
@@ -101,9 +108,9 @@ const favicons = async (
         })
             .then((response) => callback(null, response as Promise<Response>))
             .catch(callback)
+    } else {
+        return data
     }
-
-    return data
 }
 
 export default favicons

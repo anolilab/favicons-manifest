@@ -112,6 +112,9 @@ export interface WindowsSetting extends IconSetting {
         height: number
         format: "square" | "wide"
 
+        /** This is used for the browserconfig-generator image name */
+        name: string
+
         /** @internal */
         fingerprint?: string
     }[]
@@ -410,8 +413,22 @@ export interface Options {
                   favicons: boolean
                   window: boolean
               }>
-        /** @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/dn320426(v=vs.85)?redirectedfrom=MSDN */
+        /**
+         * What is site.webmanifest?
+         * This is the Web application manifest, defined by the W3C and supported by Google.
+         * At the time of writing, it is only used by Android Chrome to declare the "Add to home screen" icon and other settings.
+         */
         manifest: boolean
+
+        /**
+         * What is browserconfig.xml?
+         * Internet Explorer 11 uses browserconfig.xml to find the tile pictures and color. It is possible to indicate these information in the HTML code, but having this file has two benefits:
+         *
+         * - Whatever you put in the HTML pages, IE11 will look for browserconfig.xml. This generates 404 errors in your logs if the file is not present.
+         * - Putting the settings in browserconfig.xml saves a few bytes in the HTML pages. Only IE11 will load these extra data.
+         *
+         * @see https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/dn320426(v=vs.85)?redirectedfrom=MSDN
+         */
         browserconfig: boolean
     }>
 }

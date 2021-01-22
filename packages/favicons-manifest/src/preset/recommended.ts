@@ -298,7 +298,7 @@ export const icons: Icons = {
             overlayGlow: false,
             overlayShadow: false,
             purpose: "any",
-            darkMode: false
+            darkMode: false,
         },
     ],
     favicons: [
@@ -355,12 +355,42 @@ export const icons: Icons = {
     ],
     windows: [
         {
-            /* mstile-widthxheight.png */
+            /**
+             * There are 4 pictures, named ms-square70x70logo, ms-square150x150logo, ms-square310x310logo and ms-wide310x150logo.
+             * They should be 70x70, 150x150, 310x310 and 310x150 right? Almost.
+             * In fact Microsoft recommends to use larger pictures.
+             * This is to present high resolution pictures to the user even when the desktop is scaled up.
+             * Therefore the recommended sizes are 128x128, 270x270, 558x558 and 558x270.
+             *
+             * @see http://msdn.microsoft.com/en-us/library/ie/dn455106(v=vs.85).aspx
+             *
+             * Since all tiles are declared in browserconfig.xml, why not mstile-144x144.png?
+             * mstile-144x144.png was defined for Windows 8.0, whereas browserconfig.xml was introduced by Windows 8.1. mstile-144x144.png is somehow deprecated.
+             */
             sizes: [
                 {
-                    width: 150,
-                    height: 150,
-                    format: "square"
+                    name: "ms-70x70",
+                    width: 128,
+                    height: 128,
+                    format: "square",
+                },
+                {
+                    name: "ms-150x150",
+                    width: 270,
+                    height: 270,
+                    format: "square",
+                },
+                {
+                    name: "ms-310x310",
+                    width: 558,
+                    height: 558,
+                    format: "square",
+                },
+                {
+                    name: "ms-310x150",
+                    width: 558,
+                    height: 270,
+                    format: "wide",
                 },
             ],
             type: "png",
@@ -385,6 +415,6 @@ export const manifest: Partial<Manifest> = {
     theme_color: "#ffffff",
     apple: {
         statusBarStyle: "black-translucent",
-        webAppCapable: true
-    }
+        webAppCapable: true,
+    },
 }

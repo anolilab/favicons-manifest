@@ -291,7 +291,13 @@ const generator = async (src: Source, options: InternalOptions, logger: Logger):
                 icons.push(
                     Promise.all(
                         icon.sizes.map(({ width, height }: { width: number; height: number }, index: number) =>
-                            createFavicon(source, getOptions(width, height, platform, icon, options), icon, index, imageLogger)
+                            createFavicon(
+                                source,
+                                getOptions(width, height, platform, icon, options),
+                                icon,
+                                index,
+                                imageLogger
+                            )
                         )
                     ).then((results) =>
                         pngToIco(results.map(({ contents }) => contents)).then((buffer) => ({
@@ -301,16 +307,33 @@ const generator = async (src: Source, options: InternalOptions, logger: Logger):
                     )
                 )
             } else {
-                icon.sizes.forEach(({ width, height }: { width: number; height: number }, index: number) =>
-                    icons.push(
-                        createFavicon(
-                            source,
-                            getOptions(width, height, platform, icon, options),
-                            icon,
-                            index,
-                            imageLogger
+                icon.sizes.forEach(({ width, height }: { width: number; height: number }, index: number) => {
+                        if (appleSplashScreen.light !== undefined) {
+                            source = appleSplashScreen.light
+                        }
+
+                        icons.push(
+                            createFavicon(
+                                source,
+                                getOptions(width, height, platform, icon, options),
+                                icon,
+                                index,
+                                imageLogger
+                            )
                         )
-                    )
+
+                        if (options.darkMode && appleSplashScreen.dark !== undefined) {
+                            icons.push(
+                                createFavicon(
+                                    appleSplashScreen.dark,
+                                    getOptions(width, height, platform, icon, options),
+                                    icon,
+                                    index,
+                                    imageLogger
+                                )
+                            )
+                        }
+                    }
                 )
             }
         })

@@ -1,5 +1,5 @@
 {
-    "name": "@anolilab/favicons",
+    "name": "@anolilab/favicons-manifest",
     "version": "0.0.0",
     "description": "Favicons generator for Node.js.",
     "keywords": [
@@ -28,19 +28,16 @@
     ],
     "scripts": {
         "build": "microbundle build -i ./src/index.ts -o ./dist/index.js --no-pkg-main -f cjs --compress --strict --raw --target node",
-        "dev": "microbundle watch -i ./src/index.ts -o ./dist/index.js --no-pkg-main -f cjs --strict --raw --target node"
+        "dev": "microbundle watch -i ./src/index.ts -o ./dist/index.js --no-pkg-main -f cjs --strict --raw --target node",
+        "prepublishOnly": "if [ \"$CI\" = '' ]; then node -p 'JSON.parse(process.env.npm_package_config_manualPublishMessage)'; exit 1; fi"
     },
     "dependencies": {
-        "mime": "^2.5.0",
         "image-size": "^0.9.3",
         "jimp": "^0.16.1",
-        "lodash.defaultsdeep": "^4.6.1",
-        "through2": "^4.0.2",
         "color-string": "^1.5.4",
         "punycode": "^2.1.1",
         "bcp-47": "^1.0.8",
         "png-to-ico": "^2.1.1",
-        "vinyl": "^2.2.1",
         "escape-html": "^1.0.3",
         "fast-xml-parser": "^3.17.6",
         "ajv": "^7.0.3",
