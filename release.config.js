@@ -1,17 +1,25 @@
 module.exports = {
-    "dryRun": true,
-    "extends": "semantic-release-monorepo",
-    "plugins": [
+    dryRun: true,
+    branches: [
+        "+([0-9])?(.{+([0-9]),x}).x",
+        "main",
+        "next",
+        "next-major",
+        { name: "alpha", prerelease: true },
+        { name: "beta", prerelease: true },
+    ],
+    extends: "semantic-release-monorepo",
+    plugins: [
         [
             "@semantic-release/commit-analyzer",
             {
-                "preset": "conventionalcommits",
+                preset: "conventionalcommits",
             },
         ],
         [
             "@google/semantic-release-replace-plugin",
             {
-                "replacements": [
+                replacements: [
                     // {
                     //     "files": [
                     //         "README.md",
@@ -34,7 +42,7 @@ module.exports = {
         [
             "@semantic-release/release-notes-generator",
             {
-                "preset": "conventionalcommits",
+                preset: "conventionalcommits",
             },
         ],
         "@semantic-release/changelog",
@@ -43,15 +51,8 @@ module.exports = {
         [
             "@semantic-release/git",
             {
-                "assets": [
-                    "package.json",
-                    "dist/*",
-                    "README.md",
-                    "UPGRADE.md",
-                    "LICENSE.md.md",
-                    "CHANGELOG.md",
-                ],
+                assets: ["package.json", "dist/*", "README.md", "UPGRADE.md", "LICENSE.md.md", "CHANGELOG.md"],
             },
         ],
     ],
-};
+}

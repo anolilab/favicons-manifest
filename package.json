@@ -23,8 +23,8 @@
     "scripts": {
         "build": "yarn run workspace:webpack:build",
         "workspace:webpack:build": "yarn workspace @anolilab/favicons-manifest-webpack-plugin run build",
-        "lint": "eslint lib/*.js test/*.js",
-        "lint:fix": "eslint lib/*.js test/*.js --fix",
+        "lint": "eslint packages/**/*.ts",
+        "lint:fix": "eslint packages/**/*.ts --fix",
         "lint:text": "textlint ./.build/ISSUE_TEMPLATE/** ./src/** ./docs/** ./README.md ./UPGRADE.md --dry-run",
         "lint:text:fix": "textlint ./.build/ISSUE_TEMPLATE/** ./src/** ./docs/** ./README.md ./UPGRADE.md --fix",
         "prettify": "prettier --check lib/*.js test/*.js",
