@@ -69,7 +69,7 @@
         "webpack": "^4.46.0 || ^5.14.0"
     },
     "optionalDependencies": {
-        "html-webpack-plugin": "^4.5.1"
+        "html-webpack-plugin": "^5.0.0"
     },
     "engines": {
         "node": ">=12.16.0"
