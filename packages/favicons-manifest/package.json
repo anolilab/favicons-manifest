@@ -44,16 +44,16 @@
         "ajv-formats": "^1.5.1"
     },
     "devDependencies": {
-        "@types/node": "12.19.15",
+        "@types/node": "12.20.10",
         "@types/tinycolor2": "^1.4.2",
-        "@types/escape-html": "^1.0.0",
+        "@types/escape-html": "1.0.1",
         "@types/color-string": "^1.5.0",
         "@types/punycode": "^2.1.0",
         "@types/bcp-47": "^1.0.0",
         "@types/mime": "^2.0.3",
-        "@types/sharp": "^0.27.1",
+        "@types/sharp": "0.28.0",
         "del-cli": "^3.0.1",
-        "sharp": "^0.27.0"
+        "sharp": "0.28.1"
     },
     "peerDependencies": {
         "sharp": "^0.27.0"
