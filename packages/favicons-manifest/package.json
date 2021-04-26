@@ -41,7 +41,7 @@
         "escape-html": "^1.0.3",
         "fast-xml-parser": "^3.17.6",
         "ajv": "^7.0.3",
-        "ajv-formats": "^1.5.1"
+        "ajv-formats": "^2.0.0"
     },
     "devDependencies": {
         "@types/node": "12.19.15",
