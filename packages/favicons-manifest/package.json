@@ -56,7 +56,7 @@
         "sharp": "^0.27.0"
     },
     "peerDependencies": {
-        "sharp": "^0.27.0"
+        "sharp": "^0.27.0 || ^0.28.0"
     },
     "resolutions": {
         "minimist": "^1.2.5"
