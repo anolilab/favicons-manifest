@@ -32,7 +32,7 @@
         "prepublishOnly": "if [ \"$CI\" = '' ]; then node -p 'JSON.parse(process.env.npm_package_config_manualPublishMessage)'; exit 1; fi"
     },
     "dependencies": {
-        "image-size": "^0.9.3",
+        "image-size": "^1.0.0",
         "jimp": "^0.16.1",
         "color-string": "^1.5.4",
         "punycode": "^2.1.1",
